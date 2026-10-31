@@ -1,0 +1,194 @@
+==================== PAGE 1 ====================
+
+
+     Docentes: Grupo       TRABAJO ●   Carrera, N°4:    PRÁCTICO  Sebastian Cátedra  INTEGRADOR  -  82454  de   Inteligencia  -  Reporte  Artificial  técnico  Fecha -  5K3A  -  Segundo  de   entrega:  cuatrimestre  07/11/2025        ● ● ● ● ● ●       García, Forte, Gramática, Ferreyra, Iril, Yacuzzi,  Rocco  Guillermo  Mario  Maximiliano  Diego  Maciel  Martín  Alejandro   - Omar   50881 -   Nicolás 90104  -   66276     
+                                                                                                                             
+
+==================== PAGE 2 ====================
+
+
+sobre  las  situaciones  a  las  que  el  grupo  se  enfrentó  durante  el  desarrollo. 
+tomadas,  los  resultados  obtenidos,  las  conclusiones  a  las  que  se  llegaron  y  comentarios 
+mediante  CLIP,  FAISS  y  un  LLM.  Se  comentará  todo  el  trabajo  desarrollado,  las  decisiones  Introducción Análisis  de  dataset   -  EDA 
+En El  análisis  este 1.  Características  trabajo  de ○ ○ ○ ○      datos Cantidad Alto Peso Canales  práctico  y   se  en ancho    separa  (Se megabytes   de se total     desarrollará las en esperan  de    en pixeles imágenes  imágenes  tres   3,   partes:  que  un   como   sistema indica   archivos  RGB,  de  busqueda  para   trabajar  multimodal  con  CLIP)  de   imágenes  1  
+                                                                                                                                                                                                              
+
+==================== PAGE 3 ====================
+
+
+objeto  en  una  imagen) 
+2.  Características ○ ○ ○    Objetos Conteo Conteo    total de en  del   objetos imágenes   de contenido  objetos  de   manera  en  de  imágenes  las  única  imágenes  por  (Puede  imagen  a  partir  haber    de  múltiples  anotaciones  de  un   mismo  2  
+                                                                                     
+
+==================== PAGE 4 ====================
+
+
+           3  
+             
+
+==================== PAGE 5 ====================
+
+                  3.  Clusterización ○  Gráficos   tras de  clusters  embeddings  con  embeddings  mediante   globales K-Means   y  UMAP  4  
+                                                 
+
+==================== PAGE 6 ====================
+
+ 4.  Visualización                rápida  de  imágenes  por  clase  5  
+                              
+
+==================== PAGE 7 ====================
+punto  crucial  para  la  similitud  entre  prompts  e  imágenes  en  la  etapa  de  búsqueda. 
+normalizados justamente Se  probó  con  el    su comportamiento un   producto k=200,  pero  punto  se  que   es observó   se la   similitud quiere  que  observar  los  coseno.  resultados  con  Esta  esta   eran estrategia  visualización.  de  menor  será   calidad. utilizada    como 
+para variaciones query  luego  específica,  trabajar  dentro  y    de obtener con  conceptos  métrica  resultados  de  generales  coseno  rápidos  a  y  lo  permitir   sin largo  comprometer  del  subconjuntos  trabajo,   la ya  exactitud.   dentro, que  para  que   valores  es  
+Se con conceptos  aplica  múltiples  la  más  normalización  objetos  aislados,  de   clases permitir  de  los  distintas.   embeddings acercarse  Además,  lo   por más  norma   tener posible   más L2  a   en  un índices   el concepto  momento  permite  concreto  de  observar  su  creación,  con   una  
+buscar clases decisión   que similitud  de  posee  utilizar  entre  el  k=400,  archivo  imágenes  es  Annotations,  decir,  y  queries.  existen  pero   400  esto  centroides  no  serviría  distintos,  por  existencia  con  el  objetivo  de  imágenes  de  tener  
+adelante Se configurar  podría  para   haber explícitamente  las  utilizado  búsquedas   un al   momento k=20  mediante  y  acercarse  de  la   entrenar codificación  a  que  el   índice los  de  índices  texto,  de  búsqueda.  característica  sean  cercanos  Se   tomó esencial  a  las  la   20  para  
+El generales. semánticas  modelo   se   que  utiliza  se   observan. para  los  embeddings  La  métrica   utilizada de  imágenes,  es  la   similitud y  su  tokenizer  coseno,  se   parámetro utiliza  más  a  
+con gráfico obtenidos  512  a  dimensiones)  simple  y  asignar  vista,  la    y cantidad sin  que  comprometer  haya  de  una  centroides  diferencia  rendimiento  a  utilizar,  para  a   subconjuntos lo  que  largo  son  del  la   pipeline cantidad  dentro   del de  de   conceptos trabajo.  áreas    
+representación UMAP, bruta.  Para  elegimos  utilizar  semántica  una  este  cantidad  índice,  de  las   de es  imágenes   clusters necesario  de  (Que  entrenarlo  k=100,  otro  para  modelo  previamente  que  como  se  vean   ViT-B/32, con  distinciones  los  embeddings  que  trabaja  en  el   
+Este Debido luego  modelo  poder  a  que   acceder devuelve  el  motivo  a   embeddings  sus principal  embeddings  de   de realizar  768  cercanos,  dimensiones,  esta  clusterización  para  evitar  lo  cual  una  es  aporta   para búsqueda   visualizar más   detalle por   fuerza luego  en  la   con  
+Realizar Clusterización Crear  índice  embeddings  con  con  FAISS.  K-Means  de    imágenes  y  visualización  mediante  con  CLIP.  UMAP.    
+OpenAI. previa, Se  realizó  pero    un  aquí  índice  justificamos  IVFFLAT   para sus  parámetros.  primero  buscar    de  manera  aproximada  por  centroides  y  Metodología 
+Se Se  Este Una   separará realizaron   vez paso   los  forma   embeddings el  los  flujo   parte embedding  de   de trabajo   fueron la  exploración  con  en  creados,   el etapas  modelo  inicial.   y se  se  CLIP  crea  dará  Sus   ViT-L-14, un  información  resultados  índice   con sobre    se relevante los   estos encuentran  pesos  con   de entrenados   FAISS. cada  en  la  una.   sección  por    6 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+
+==================== PAGE 8 ====================
+Se  plantearon  cuatro  opciones  distintas: 
+Se  explicará  en  cada  caso  cómo  se  utilizó  el  modelo  y  la  estrategia  de  búsqueda  utilizada. 
+
+buscar  propósito mediante   el original.  índice   FAISS. 
+En  casos “person  con  alternativas  walking  around  de  prompt,  the  park”,  se  tokenizan  que  llevaban  y  se  a  usa  un   su área  promedio  semántica  como  alejada  valor  del  a  
+otras  variaciones. sencilla  como   “person”,  se  obtenían  resultados  que  agregaban  contexto,  como 
+Se  discutirá La  limitación  en  su  apartado  de  creatividad  correspondiente  se  da  ya   que las   posibles en  intentos  causas  tempranos,  y  resultados  para   una vistos  query  con  
+parámetros sin  perder  se  presentaban  el  significado  grandes  de  la   problemas query  del  usuario.  en  la  reformulación.   
+entrada. La  Esto  idea  se  es  hizo  expandir  por  repetibilidad  la  idea  original  del  pipeline,  con  alternativas  y  porque  que  al  utilizarlo  brinden   con variación  otros   semántica 
+determinista similitud  y  genere  coseno,  las  junto  mismas  con   traducciones/variaciones su  nombre.   frente  a  las  mismas  queries  de 
+parámetro índice  "do_sample"  FAISS  y  se  se  devuelven  dejó  en  False  los  scores  para  que  de   las el  modelo  diez  mejores  sea  completamente  imágenes  con   mayor 
+del  concepto tokenizer  semántico  del  modelo  de  la  CLIP,  query  se  original  promedian  al  ser  los  demasiado  valores  de  creativo.  embeddings,  Además,  se   busca el   en  el 
+En  todos Una  los  vez  usos  se  del  tienen  LLM  las  se   alternativas utilizó  una  temperatura  de  prompts   en de   un 0  para  diccionario,  evitar  que  se   el codifican  LLM  se   con desvíe  el  
+negativos. negativos,   pero  se  solicita  que  se  mantenga  en  las  alternativas  de  query. 
+de  búsqueda muy  creativa  que  se   (Para utiliza   no tras  perder  la  traducción,  el  significado  creación  original).  de  alternativas  No  se  realiza  y  detección  tratamiento  de   de 
+Se  realizaron la  prompt  prompts  introducida  al  LLM  por  personalizados  el  usuario,  y   se para  especifica  cada  caso,  que  ajustándolo  no  la  expanda  para  de  el   manera método  
+Inclusión  de  modelo  LLM  Se   utilizó 1. 2. 3.     Query Query  Query   el  modelo    directo: traducido con  reformulación:  LLM  Sin   Phi-3-mini-4k-instruct a   traducción. inglés :   Mediante Mediante    LLM, LLM  de    Microsoft. se el   prompt solicita     es que  el   se siguiente  generen   alternativas  a  7 
+"You strings. "Do "Understand it "Your key: "'translated_prompt'.\n\n"   to  not  are   " task     add a "    tool.   is any the  to    text, semantic  You create  ONLY  explanations, english   a  meaning  output search   if     valid of it plan    or the is     dictionary Python markdown.  in query  spanish"   dictionary and   "  with  translate   one   
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+
+==================== PAGE 9 ====================
+pruebas  con  prompts  que  no  tenían  el  mismo  rendimiento. 
+Se  brindaron  ejemplos  de  query  para  refinar  el  comportamiento  esperado  tras 
+búsqueda,  y  penalizar  por  los  conceptos  negativos  detectados. 
+que  sean  lo  más  cercano  a  un  concepto  general  sin  que  la  negación  afecte  a  la 
+La  idea  es  separar  los  conceptos  positivos  de  los  negativos,  para  obtener  resultados 
+negativos  si  existen,  y  si  no,  dejar  vacío. 
+negativos.  Luego,  en  otra  key  del  diccionario,  que  se  extraigan  los  conceptos 
+ conceptos  positivos  del  prompt  en  una  key  de  un  diccionario,  excluyendo  los 
+4.   Query   con  reranking:  Mediante  LLM  se  solicita  que  se  generen  alternativas  a  los  8  "You strings. "Do "Translate "Your key: "'alternative_prompts'.\n\n" "RULES:\n" "1. the  synonyms "3. all "4. negations "You "Do "Understand it "Your keys: "'positive_prompts'  "RULES:\n" "0. "1. query concepts\n" "2. explicitly "If empty "3. include "2.         to       not  'alternative_prompts': user  If in If  not ANALYZE 'positive_prompts': 'negative_prompts': no If are  " Do ONLY        task     english" task " with  list    the the the   explicit the    add  not  add them a " query. to           in output       tool.  it is   query reformulated query   is  its  negated [].\n\n" query   any add the  any the THE    your  all to to  to         multiple   text,   " extra full    text, semantic  FULL negations,   You english create  contains contains  valid create  contains in alternative   concepts     and  the ONLY   query."  QUERY explanations, context  explanations,   Python        a query."  a 'negative_prompts'.\n\n" List subjects. List reformulated  and    meaning   output search  multiple a search   multiple List  BEFORE  'negative_prompts'    negation,   with then    of of to query." dictionary       of    5 English  valid  plan the of plan    'no', create   DECIDING English Exclude   5 concepts,   positive or   or the   English original    query."   dictionary include  dictionary  Python markdown. markdown.   'sin',   query translations alternatives." strings.    variants the WHAT    concepts,   variants  include      dictionary prompt. those and negated 'without'" MUST       TO " with  "  with  "  translate      DO." of be      them    of   one of Just two the an             
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+
+==================== PAGE 10 ====================
+
+El  factor  de  penalización  utilizado  es  0,3. 
+visualizados  de  los  scores  promedio. 
+penalización,  que  se  ajustó  empíricamente  considerando  los  valores  obtenidos  y 
+de  realizar  una  búsqueda  por  los  conceptos  negativos  multiplicado  por  un  factor  de 
+reformulación. restar valor  del  al   score factor    obtenido de  penalización  por  los   conceptos en  los  scores  que  obtenidos.  se  consideran   positivos,  el  resultado 
+    El Para En     funcionamiento  los  la  resultados  detección    se de para   va negativos   los a  discutir  prompts  se  en  utiliza  positivos  profundidad  una   técnica es  el  el  mismo  impacto  de  penalización  que  de  para  este  el  método   que caso  consiste  simple  y  el    de en 9    "4. synonyms "5. Only  "EXAMPLES:\n" "User: "Output: canine', 'negative_prompts':  "User: "Output: ball canine puppy', vicinity'],  "User: "Output: automobile', 'negative_prompts':  "User: "Output: human', person'], 'puppy']}\n\n" Score   Do It   the and         not is 'perro'\n" 'persona near',  'auto 'una  final       'a   'an to  explicit {'positive_prompts': 'a {'positive_prompts': a {'positive_prompts': {'positive_prompts':   VERY   'negative_prompts': add   dog', photo    the puppy', 'negative_prompts':   persona individual',    pero 'a =   'individual   extra  important   Score full jugando   vehicle',   'a of  negations." no          'a []}\n\n" human a  ['red  sin  context query."  rojo'\n" positivos de  person dog',     a un  penalización) to      'a la playing with 'a car',   perro'\n"    detect      person', to   'a pelota  playing   car',   ['a ['a  ['a ['a ['dog',    a   - the pet  []}\n\n" 'red     ball   (Score  photo photo with photo  photo  the   'an original dog'], con      with colored 'a     and  'canine', negatives    a  image    of un of   of of portrait negativos soccer       accompanied a   a perro'\n" a  a a    dog     prompt. dog', person car', of car']}\n\n" person',      ball in a  correctly.  of     car'], * 'a  the 'an     with  a Factor Just  with    by   'a       a  a  a    
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
+==================== PAGE 11 ====================
+pero  los  mismos  prompts: 
+Para  todos  estos  prompts  se  realizó  análisis  y  comparación  con  dos  formas  de  usar  LLM 
+modelo. 
+precisión@10  utilizando  las  annotations  y  se  calculará  el  promedio  de  score  obtenido  por 
+casos un lectura. reranking  modelo  de que funcionamiento que en    uso:  para funcionamiento    a forma presente  otro,   las    parte se 40   una visualizará  queries   con de  negación.   con  las una  de   clases reranking.   query  el submission,  funcionamiento   de  compleja  Annotations.   las  que  mismas  del  tenga   LLM,  se  múltiples   se encuentran  calcularán  objetos.  en  métricas  el   notebook.  de   Resultados 
+Para Además Las Nota:                      1. 2. 3. 4. ● ● visualizaciones    analizar      En "gato": "persona "caballo "mujer Temperatura Temperatura   de caso  resultados   los   con Para de  blanco   trabajando  resultados, querer  sombrero   verificar   de 0,3 0   y   cualitativos imágenes corriendo   do_sample y  visualizar  do_sample    en  el pero se   funcionamiento la  utilizarán    sin  se computadora sin   mediante todas  False   realizarán jinete":   lentes": True   las  cuatro (Modelo  (Modelo    Para la imágenes  Otro    básico  observación solamente y  prompts   con verificar   ejemplo 0)  0.3)    un de  encontradas    gato":  traducción específicos   el con  con   de funcionamiento   modelo   imágenes Para negación    de con verificar  que  0,3  una  el    para y  engloban para   método  cómo query   en el  profundizar    facilidad una   mejora sencilla   de  tres query     de de    10   
+                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+==================== PAGE 12 ====================
+
+Query  “gato”  Modelo   0.3  11  
+          
+
+==================== PAGE 13 ====================
+
+
+Query  “persona  trabajando  en  la  computadora  y  con  un  gato” 
+Modelo  Modelo   0 0.3   12  
+                               
+
+==================== PAGE 14 ====================
+
+
+Modelo  0  13  
+      
+
+==================== PAGE 15 ====================
+Query  “caballo  blanco  corriendo  sin  jinete”   Modelo  0.3 14  
+                
+
+==================== PAGE 16 ====================
+
+
+Modelo  0 15  
+     
+
+==================== PAGE 17 ====================
+
+Query  “mujer  con  sombrero  pero  sin  lentes” 
+     Modelo     0.3  16  
+                           
+
+==================== PAGE 18 ====================
+
+Modelo    0 17  
+      
+
+==================== PAGE 19 ====================
+que  se  obtenga  un  valor  de  1  en  los  mismos. 
+Los  scores  a  fin  de  cuenta  son  un  valor  de  comparación  relativo,  ya  que  es  casi  imposible 
+conceptos  negados. 
+con  el  criterio  de  la  query  original  o  tienen  un  score  relativo  mejor  a  las  que  contienen 
+penalizan  a  los  conceptos  que  se  toman  como  negativos,  dejando  imágenes  que  cumplen 
+Sin  embargo,  analizando  las  imágenes  obtenidas,  se  ve  cómo  los  topk  mejoran  y  se 
+la  similitud  de  las  imágenes  con  sus  textos. 
+CLIP,  hay  múltiples  dimensiones  semánticas  que  se  contemplan  y  que  terminan  afectando  a 
+aunque  no  presenten  de  manera  explícita  el  concepto  negativo.  Por  el  funcionamiento  de 
+técnica  de  penalización  utilizada,  que  siempre  termina  penalizando  a  los  prompts  positivos 
+
+encontradas  se  acercan  más  a  la  query  solicitada.  Esta  disminución  del  score  se  debe  a  la 
+El componentes.  score  promedio   disminuye  en  gran  medida,  pero  se  puede  observar  cómo  las  imágenes 
+Sin son obtenemos   embargo, comunes  la    en al cantidad  conjunto  las  negaciones  de  del  imágenes  prompt  se  pueden   complejo que  cumplen  visualizar  y  al   el conjunto  rol  diferencias  de  ground  de  la   intersección sustanciales.  truth  aproximado.  de   
+unión  de  conjuntos 
+robustos Finalmente, A  estos,   les a  menos.   realizamos se  realiza   una  una  búsqueda  intersección  del   con prompt  los   conjuntos complejo   y de  se  conceptos  observa  cuántas  descompuestos  imágenes  y  
+traducción realizando 2000 creadas.  mejores    del intersecciones   de query  cada  original.  conjunto  entre  Esto   dichos individual.  es  esperable  conjuntos.   ya   que  es  el  orden  de  modelos  más  Métrica  de  evaluación  mediante  descomposición  y 
+obtiene complejas relación compuesto   mayor con  con  para  otros,   valor múltiples  tener  utilizamos  de  una  puntuación,  componentes  idea  una  general  búsqueda  seguido  obteniendo  de  las   por de  imágenes   4000 el   resultados modelo  candidatos  que  de    cumplen parciales reformulación  para   quedarse  con de   cada las  y   luego prompts   uno, con   la  los y    
+Conclusiones  de  resultados 
+En Se Los Como Realizamos    las plantea  prompts   los dos  conceptos   primeras un   dos utilizados  esquema  búsquedas,   queries descompuestos  son  de   los evaluación   evaluadas, cambiando  siguientes:  pueden  de   se los   un  puede  parámetros   ground ser   muy visualizar  truth  amplios  de  aproximado  la  que  búsqueda  y   no el  modelo  tener  para  del  en  con   consultas  conjunto un   reranking principio     18  
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
+==================== PAGE 20 ====================
+ 
+tomaremos  el  top_k  =  10,  como  usamos  a  lo  largo  del  desarrollo  del  trabajo. 
+Además,  dependiendo  de  la  cantidad  de  top_k  que  se  utilicen  varía.  Sin  embargo, 
+compuesto  y  el  conjunto  de  descomposiciones. 
+que  queden  por  fuera.  Lo  que  realmente  vale  es  ver  la  intersección  entre  el  conjunto 
+top_k  top_k  El  valor   = =    10 1000 IoU  k_candidates  no  k_candidates  tiene  mucho  =   1000 =  valor  2000    por  comp  sí  mismo   ya  que  pueden  haber  múltiples  imágenes  19  
+                                                                                                                                                               
+
+==================== PAGE 21 ====================
+estrategía dimensiones gran  longitud,  para  y  ya  a  encontrar   256, que   el pero  modelo  ALGUNA  en  ambos  no   lo de   casos soporta.  las  etiquetas  los   resultados  esperadas,  no  tenían  en  vez  sentido.  de  todas.  
+mismas  solamente deba Se  busca  a  que  queries.  un  la  se   balance etiqueta  perdían    entre de  más  “cat”   que detalles  sin  el   contar prompt  de  lo  con   dé esperado.   la resultados  de  “person”,  Se   probó sin   que por  reducir   el lo   mismo que  a  se  50   sea modificó   de   la 
+reformulación también negaciones “persona permitiera query deseado,  planteado,  lleva   trabajando escapa  tener  aceptable.   a confundía   variaciones resultados   por de    en las lo    que  la  capacidades la  computadora   orden  aceptables,  sutiles se  descartó  (El  en  prompt)   de cada   el  y  completamente un   con mismo   ejecución modelo  por  un    pasó la gato”,   query liviano.  de  por  múltiples   del búsquedas,  a  múltiples    buscar. trabajo.  imágenes     iteraciones. Posiblemente  incluso  tenían  para   las   se  
+  Limitaciones debido semántica mejoró las integrar trabajo. pero prompt  métricas  a     la  del a mucho   que Hasta en   que hora    mayor, enfoque: el   contemple de   con entorno    de encontrar la  precisión   estabilidad   realizar temperatura por    de lo  todo   que   un  Kaggle, no las    prompt  lo  son  del se búsquedas   necesario 0,3   incluyeron  mismo, del  por  y   lo  do_sample todo  lo  suficientemente   que lo    los y aplicables.    que que resultados   se resultados    permitió involucre optó  =  True,   por Por   con robusto     no a tener phi3mini.   el  ejemplo, veces   su  tenían análisis   funcionamiento. un  y    el flexible manejo    coherencia  en LLM  semántico  el    de análisis  que de      con  Esto  para  el    Discusión  y  análisis  crítico 
+¿Qué ¿Qué          ● ● ● ● ● ● ● ●           funcionó intentos Utilización Sin Incluir No Se El Se Como  prompt     barajó realizó todas embargo,   ejemplos se  no    bien?: las   mencionó   la realizado PCA de  funcionaron   posibilidad imágenes   temperatura esta    en esperados   creatividad embeddings   a previamente,  los   están de   y LLM    0  utilizar por de  y  correctamente     do_sample extra fue comportamiento   qué?: y     en la otros una   que principal  uso   de   LLM se   de  las =   le  False   índices   etiquetadas como limitación  grandes permite  en   en  el TinyLlama,  con   prompt LLM:   al fuentes  fue   el LLM  en    propósito el Esta   Annotations, de   LLM. permite   de pero   reranking decisión  problemas  El  no  de   una realizar  se  reducir   se    por del pudo variación   tomó del    lo LLM un    ruido,  que    20    
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+
+==================== PAGE 22 ====================
+Pascal  2012  VOC  y  otras  planteadas  por  la  cátedra. 
+reformulación  y  detección  de  negativos  en  una  serie  de  queries  planteadas  en  el  dataset 
+semántico  de  los  mismos,  FAISS  para  la  creación  de  índices  y  un  LLM  para  la  traducción, 
+CLIP la  utilidad  para similitud que una   del la   no query  conversión  uso  requieran  y    qué más de  modelos  tan  compleja   de de  preciso   imágenes comparar  de  que   lenguaje se   puede represente   y visualmente  texto  y   hacer redes  a  embeddings  conceptos   una  neuronales. las   query. imágenes.  semánticos  que    contienen   específicos.  el  significado  
+completo complejas, comprensión de annotations, analizar,  para  las  y  es  frases,  un   un como  sistema  trabajo   ver  semántica. y   en que  hasta  el   de integral   pueda primer   búsqueda qué  Sería    detectar  punto que punto,  interesante  nos  multimodal  se  hasta   negativos  permitió puede  qué   ver llegar   de  ver punto   de hasta  imágenes  en   manera a    se generar profundidad  qué  puede   punto  confiable. utilizando  métricas  tener  se  el   podría  funcionamiento un   las  cuantitativas  embedding  tecnologías  mejorar    la  y y     Trabajo Conclusión  futuro  
+Algunas   En El  trabajo  este ● ● ● ● ●      Utilizar Realizar Con Realizar Realizar   trabajo posibles  incluyó  más  un     práctico un pruebas pruebas  tiempo    mejoras la modelo  prompt  creación   de nos   con con   de que   robusto la   habría    lenguaje  otros modelos de materia  nos  métricas    LLM parece  que gustado    de más de   ayude que    inteligencia CLIP propias  interesante  avanzado,   realizar estén  a  que  tener  para  más  tengan  más  artificial,    un  que realizar  la especializados.    análisis similitud métricas   tenga más   se son:  dimensionalidad,    mayores realizó semántico   entre que   no    imágenes una   involucren capacidades   mucho pipeline   para y   mayor prompts   las   de    21  
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+

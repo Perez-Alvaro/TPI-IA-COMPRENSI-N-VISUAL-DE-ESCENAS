@@ -1,0 +1,391 @@
+
+==================== PAGE 1 ====================
+[560.3 | sz=16.0] Cátedra de Inteligencia Artificial - 5K3A
+[541.5 | sz=16.0] TRABAJO PRÁCTICO INTEGRADOR - Reporte técnico - Segundo cuatrimestre
+[428.3 | sz=16.0] Docentes:
+[410.3 | sz=14.7] ● García, Mario Alejandro
+[395.8 | sz=14.7] ● Forte, Guillermo Omar
+[381.2 | sz=14.7] ● Gramática, Martín Nicolás
+[351.2 | sz=16.0] Grupo N°4:
+[332.3 | sz=16.0] ● Carrera, Sebastian - 82454
+[317.4 | sz=14.7] ● Ferreyra, Diego - 50881
+[302.9 | sz=14.7] ● Iril, Rocco Maciel - 90104
+[288.3 | sz=14.7] ● Yacuzzi, Maximiliano - 66276
+[140.7 | sz=16.0] Fecha de entrega: 07/11/2025
+
+==================== PAGE 2 ====================
+[745.6 | sz=34.7] Introducción
+[722.3 | sz=14.7] En este trabajo práctico se desarrollará un sistema de busqueda multimodal de imágenes
+[707.8 | sz=14.7] mediante CLIP, FAISS y un LLM. Se comentará todo el trabajo desarrollado, las decisiones
+[693.2 | sz=14.7] tomadas, los resultados obtenidos, las conclusiones a las que se llegaron y comentarios
+[678.7 | sz=14.7] sobre las situaciones a las que el grupo se enfrentó durante el desarrollo.
+[650.0 | sz=34.7] Análisis de dataset - EDA
+[626.7 | sz=14.7] El análisis de datos se separa en tres partes:
+[612.2 | sz=14.7] 1. Características de las imágenes como archivos
+[597.6 | sz=14.7] ○ Cantidad total de imágenes
+[583.1 | sz=14.7] ○ Alto y ancho en pixeles
+[568.5 | sz=14.7] ○ Peso en megabytes
+[554.0 | sz=14.7] ○ Canales (Se esperan 3, que indica RGB, para trabajar con CLIP)
+[40.0 | sz=14.7] 1
+
+==================== PAGE 3 ====================
+[535.0 | sz=14.7] 2. Características del contenido de las imágenes a partir de anotaciones
+[520.4 | sz=14.7] ○ Objetos en imágenes
+[505.9 | sz=14.7] ○ Conteo total de objetos en imágenes (Puede haber múltiples de un mismo
+[491.3 | sz=14.7] objeto en una imagen)
+[476.8 | sz=14.7] ○ Conteo de objetos de manera única por imagen
+[40.0 | sz=14.7] 2
+
+==================== PAGE 4 ====================
+[40.0 | sz=14.7] 3
+
+==================== PAGE 5 ====================
+[759.7 | sz=14.7] 3. Clusterización tras embeddings mediante K-Means y UMAP
+[745.1 | sz=14.7] ○ Gráficos de clusters con embeddings globales
+[40.0 | sz=14.7] 4
+
+==================== PAGE 6 ====================
+[759.7 | sz=14.7] 4. Visualización rápida de imágenes por clase
+[40.0 | sz=14.7] 5
+
+==================== PAGE 7 ====================
+[745.6 | sz=34.7] Metodología
+[722.3 | sz=14.7] Se separará el flujo de trabajo en etapas y se dará información relevante de cada una.
+[687.9 | sz=17.3] Realizar embeddings de imágenes mediante CLIP.
+[666.6 | sz=14.7] Se realizaron los embedding con el modelo CLIP ViT-L-14, con los pesos entrenados por
+[652.0 | sz=14.7] OpenAI.
+[637.5 | sz=14.7] Este modelo devuelve embeddings de 768 dimensiones, lo cual aporta más detalle en la
+[622.9 | sz=14.7] representación semántica de las imágenes (Que otro modelo como ViT-B/32, que trabaja
+[608.4 | sz=14.7] con 512 dimensiones) sin comprometer rendimiento a lo largo del pipeline del trabajo.
+[593.8 | sz=14.7] El modelo se utiliza para los embeddings de imágenes, y su tokenizer se utiliza más
+[579.3 | sz=14.7] adelante para las búsquedas mediante la codificación de texto, característica esencial para
+[564.7 | sz=14.7] buscar similitud entre imágenes y queries.
+[550.2 | sz=14.7] Se aplica la normalización de los embeddings por norma L2 en el momento de su creación,
+[535.6 | sz=14.7] para luego trabajar con métrica de coseno a lo largo del trabajo, ya que para valores
+[521.1 | sz=14.7] normalizados su producto punto es la similitud coseno. Esta estrategia será utilizada como
+[506.6 | sz=14.7] punto crucial para la similitud entre prompts e imágenes en la etapa de búsqueda.
+[457.6 | sz=17.3] Clusterización con K-Means y visualización con UMAP.
+[436.3 | sz=14.7] Este paso forma parte de la exploración inicial. Sus resultados se encuentran en la sección
+[421.7 | sz=14.7] previa, pero aquí justificamos sus parámetros.
+[407.2 | sz=14.7] Debido a que el motivo principal de realizar esta clusterización es para visualizar luego con
+[392.6 | sz=14.7] UMAP, elegimos una cantidad de clusters de k=100, para que se vean distinciones en el
+[378.1 | sz=14.7] gráfico a simple vista, y que haya una diferencia para subconjuntos dentro de conceptos
+[363.5 | sz=14.7] generales.
+[349.0 | sz=14.7] Se podría haber utilizado un k=20 y acercarse a que los índices sean cercanos a las 20
+[334.4 | sz=14.7] clases que posee el archivo Annotations, pero esto no serviría por existencia de imágenes
+[319.9 | sz=14.7] con múltiples objetos de clases distintas. Además, tener más índices permite observar
+[305.4 | sz=14.7] variaciones dentro de conceptos generales y permitir subconjuntos dentro, que es
+[290.8 | sz=14.7] justamente el comportamiento que se quiere observar con esta visualización.
+[256.4 | sz=17.3] Crear índice con FAISS.
+[235.1 | sz=14.7] Una vez los embeddings fueron creados, se crea un índice sobre estos con FAISS.
+[220.5 | sz=14.7] Se realizó un índice IVFFLAT para primero buscar de manera aproximada por centroides y
+[206.0 | sz=14.7] luego poder acceder a sus embeddings cercanos, para evitar una búsqueda por fuerza
+[191.4 | sz=14.7] bruta. Para utilizar este índice, es necesario entrenarlo previamente con los embeddings
+[176.9 | sz=14.7] obtenidos y asignar la cantidad de centroides a utilizar, que son la cantidad de áreas
+[162.3 | sz=14.7] semánticas que se observan. La métrica utilizada es la similitud coseno, parámetro a
+[147.8 | sz=14.7] configurar explícitamente al momento de entrenar el índice de búsqueda. Se tomó la
+[133.2 | sz=14.7] decisión de utilizar k=400, es decir, existen 400 centroides distintos, con el objetivo de tener
+[118.7 | sz=14.7] conceptos más aislados, permitir acercarse lo más posible a un concepto concreto con una
+[104.2 | sz=14.7] query específica, y obtener resultados rápidos sin comprometer la exactitud.
+[89.6 | sz=14.7] Se probó con un k=200, pero se observó que los resultados eran de menor calidad.
+[40.0 | sz=14.7] 6
+
+==================== PAGE 8 ====================
+[757.8 | sz=17.3] Inclusión de modelo LLM
+[736.5 | sz=14.7] Se utilizó el modelo LLM Phi-3-mini-4k-instruct de Microsoft.
+[721.9 | sz=14.7] Se realizaron prompts al LLM personalizados para cada caso, ajustándolo para el método
+[707.4 | sz=14.7] de búsqueda que se utiliza tras la traducción, creación de alternativas y detección de
+[692.9 | sz=14.7] negativos.
+[678.3 | sz=14.7] En todos los usos del LLM se utilizó una temperatura de 0 para evitar que el LLM se desvíe
+[663.8 | sz=14.7] del concepto semántico de la query original al ser demasiado creativo. Además, el
+[649.2 | sz=14.7] parámetro "do_sample" se dejó en False para que el modelo sea completamente
+[634.7 | sz=14.7] determinista y genere las mismas traducciones/variaciones frente a las mismas queries de
+[620.1 | sz=14.7] entrada. Esto se hizo por repetibilidad del pipeline, y porque al utilizarlo con otros
+[605.6 | sz=14.7] parámetros se presentaban grandes problemas en la reformulación.
+[591.0 | sz=14.7] Se discutirá en su apartado correspondiente las posibles causas y resultados vistos con
+[576.5 | sz=14.7] otras variaciones.
+[561.9 | sz=14.7] En casos con alternativas de prompt, se tokenizan y se usa su promedio como valor a
+[547.4 | sz=14.7] buscar mediante el índice FAISS.
+[518.3 | sz=14.7] Se explicará en cada caso cómo se utilizó el modelo y la estrategia de búsqueda utilizada.
+[503.8 | sz=14.7] Se plantearon cuatro opciones distintas:
+[489.2 | sz=14.7] 1. Query directo: Sin traducción.
+[474.7 | sz=14.7] 2. Query traducido a inglés: Mediante LLM, el prompt es el siguiente
+[440.7 | sz=14.7] "You are a tool. You ONLY output valid Python dictionary
+[426.4 | sz=14.7] strings. "
+[412.1 | sz=14.7] "Do not add any text, explanations, or markdown. "
+[397.7 | sz=14.7] "Understand the semantic meaning of the query and translate
+[383.4 | sz=14.7] it to                 english if it is in spanish"
+[369.1 | sz=14.7] "Your task is to create a search plan dictionary with one
+[354.7 | sz=14.7] key: "
+[340.4 | sz=14.7] "'translated_prompt'.\n\n"
+[304.4 | sz=14.7] 3. Query con reformulación: Mediante LLM se solicita que se generen alternativas a
+[289.8 | sz=14.7] la prompt introducida por el usuario, y se especifica que no la expanda de manera
+[275.3 | sz=14.7] muy creativa (Para no perder el significado original). No se realiza tratamiento de
+[260.7 | sz=14.7] negativos, pero se solicita que se mantenga en las alternativas de query.
+[246.2 | sz=14.7] Una vez se tienen las alternativas de prompts en un diccionario, se codifican con el
+[231.6 | sz=14.7] tokenizer del modelo CLIP, se promedian los valores de embeddings, se busca en el
+[217.1 | sz=14.7] índice FAISS y se devuelven los scores de las diez mejores imágenes con mayor
+[202.6 | sz=14.7] similitud coseno, junto con su nombre.
+[188.0 | sz=14.7] La idea es expandir la idea original con alternativas que brinden variación semántica
+[173.5 | sz=14.7] sin perder el significado de la query del usuario.
+[158.9 | sz=14.7] La limitación de creatividad se da ya que en intentos tempranos, para una query
+[144.4 | sz=14.7] sencilla como “person”, se obtenían resultados que agregaban contexto, como
+[129.8 | sz=14.7] “person walking around the park”, que llevaban a un área semántica alejada del
+[115.3 | sz=14.7] propósito original.
+[40.0 | sz=14.7] 7
+
+==================== PAGE 9 ====================
+[754.8 | sz=14.7] "You are a tool. You ONLY output valid Python dictionary
+[740.5 | sz=14.7] strings. "
+[726.2 | sz=14.7] "Do not add any text, explanations, or markdown. "
+[711.9 | sz=14.7] "Translate it to english and then create alternatives."
+[697.5 | sz=14.7] "Your task is to create a search plan dictionary with one
+[683.2 | sz=14.7] key: "
+[668.9 | sz=14.7] "'alternative_prompts'.\n\n"
+[625.9 | sz=14.7] "RULES:\n"
+[611.5 | sz=14.7] "1. 'alternative_prompts': List of 5 English variants of
+[597.2 | sz=14.7] the user query. "
+[582.9 | sz=14.7] "2. Do not add extra context to the original prompt. Just
+[568.6 | sz=14.7] synonyms to the full query."
+[554.2 | sz=14.7] "3. If the query contains multiple concepts, include them
+[539.9 | sz=14.7] all in the reformulated query."
+[525.6 | sz=14.7] "4. If the query contains a negation, include those
+[511.2 | sz=14.7] negations in your alternative query."
+[460.6 | sz=14.7] 4. Query con reranking: Mediante LLM se solicita que se generen alternativas a los
+[446.1 | sz=14.7] conceptos positivos del prompt en una key de un diccionario, excluyendo los
+[431.6 | sz=14.7] negativos. Luego, en otra key del diccionario, que se extraigan los conceptos
+[417.0 | sz=14.7] negativos si existen, y si no, dejar vacío.
+[402.5 | sz=14.7] La idea es separar los conceptos positivos de los negativos, para obtener resultados
+[387.9 | sz=14.7] que sean lo más cercano a un concepto general sin que la negación afecte a la
+[373.4 | sz=14.7] búsqueda, y penalizar por los conceptos negativos detectados.
+[358.8 | sz=14.7] Se brindaron ejemplos de query para refinar el comportamiento esperado tras
+[344.3 | sz=14.7] pruebas con prompts que no tenían el mismo rendimiento.
+[310.3 | sz=14.7] "You ONLY output valid Python dictionary strings. "
+[297.9 | sz=14.7] "Do not add any text, explanations, or markdown. "
+[285.4 | sz=14.7] "Understand the semantic meaning of the query and translate
+[273.0 | sz=14.7] it to english"
+[260.5 | sz=14.7] "Your task is to create a search plan dictionary with two
+[248.0 | sz=14.7] keys: "
+[235.6 | sz=14.7] "'positive_prompts' and 'negative_prompts'.\n\n"
+[210.7 | sz=14.7] "RULES:\n"
+[198.2 | sz=14.7] "0. ANALYZE THE FULL QUERY BEFORE DECIDING WHAT TO DO."
+[185.7 | sz=14.7] "1. 'positive_prompts': List of 5 English variants of the
+[173.3 | sz=14.7] query with its multiple subjects. Exclude the negated
+[160.8 | sz=14.7] concepts\n"
+[148.4 | sz=14.7] "2. 'negative_prompts': List of English translations of
+[135.9 | sz=14.7] explicitly negated concepts with 'no', 'sin', 'without'"
+[123.4 | sz=14.7] "If no explicit negations, 'negative_prompts' MUST be an
+[111.0 | sz=14.7] empty list [].\n\n"
+[98.5 | sz=14.7] "3. If the query contains multiple positive concepts,
+[86.0 | sz=14.7] include them all in the reformulated query."
+[40.0 | sz=14.7] 8
+
+==================== PAGE 10 ====================
+[754.8 | sz=14.7] "4. Do not add extra context to the original prompt. Just
+[742.4 | sz=14.7] synonyms to the full query."
+[729.9 | sz=14.7] "5. It is VERY important to detect the negatives correctly.
+[717.5 | sz=14.7] Only the explicit negations."
+[692.5 | sz=14.7] "EXAMPLES:\n"
+[680.1 | sz=14.7] "User: 'perro'\n"
+[667.6 | sz=14.7] "Output: {'positive_prompts': ['a photo of a dog', 'a
+[655.2 | sz=14.7] canine', 'a puppy', 'a dog', 'a pet dog'],
+[642.7 | sz=14.7] 'negative_prompts': []}\n\n"
+[617.8 | sz=14.7] "User: 'persona jugando a la pelota con un perro'\n"
+[605.3 | sz=14.7] "Output: {'positive_prompts': ['a photo of a person with a
+[592.9 | sz=14.7] ball and a dog', 'a human playing with a soccer ball with a
+[580.4 | sz=14.7] canine near', 'individual with a ball and accompanied by a
+[567.9 | sz=14.7] puppy', 'a photo of a person playing with a dog in the
+[555.5 | sz=14.7] vicinity'], 'negative_prompts': []}\n\n"
+[530.5 | sz=14.7] "User: 'auto pero no rojo'\n"
+[518.1 | sz=14.7] "Output: {'positive_prompts': ['a photo of a car', 'an
+[505.6 | sz=14.7] automobile', 'a vehicle', 'a car', 'an image of a car'],
+[493.2 | sz=14.7] 'negative_prompts': ['red car', 'red colored car']}\n\n"
+[468.2 | sz=14.7] "User: 'una persona sin un perro'\n"
+[455.8 | sz=14.7] "Output: {'positive_prompts': ['a photo of a person', 'a
+[443.3 | sz=14.7] human', 'an individual', 'a person', 'a portrait of a
+[430.9 | sz=14.7] person'], 'negative_prompts': ['dog', 'canine',
+[418.4 | sz=14.7] 'puppy']}\n\n"
+[371.6 | sz=14.7] El funcionamiento para los prompts positivos es el mismo que para el caso simple de
+[357.0 | sz=14.7] reformulación.
+[342.5 | sz=14.7] Para la detección de negativos se utiliza una técnica de penalización que consiste en
+[327.9 | sz=14.7] restar al score obtenido por los conceptos que se consideran positivos, el resultado
+[313.4 | sz=14.7] de realizar una búsqueda por los conceptos negativos multiplicado por un factor de
+[298.8 | sz=14.7] penalización, que se ajustó empíricamente considerando los valores obtenidos y
+[284.3 | sz=14.7] visualizados de los scores promedio.
+[269.8 | sz=14.7] El factor de penalización utilizado es 0,3.
+[235.8 | sz=14.7] Score final = Score positivos - (Score negativos * Factor
+[223.4 | sz=14.7] de penalización)
+[203.7 | sz=14.7] En los resultados se va a discutir en profundidad el impacto de este método y el
+[189.2 | sz=14.7] valor del factor de penalización en los scores obtenidos.
+[40.0 | sz=14.7] 9
+
+==================== PAGE 11 ====================
+[745.6 | sz=34.7] Resultados
+[722.3 | sz=14.7] Para analizar los resultados, se utilizarán cuatro prompts específicos que engloban tres
+[707.8 | sz=14.7] casos de uso:
+[693.2 | sz=14.7] 1. "gato": Para verificar el funcionamiento básico de traducción de una query sencilla
+[678.7 | sz=14.7] que forma parte de las clases de Annotations.
+[664.1 | sz=14.7] 2. "persona trabajando en la computadora y con un gato": Para verificar el
+[649.6 | sz=14.7] funcionamiento con una query compleja que tenga múltiples objetos.
+[635.0 | sz=14.7] 3. "caballo blanco corriendo sin jinete": Para verificar el funcionamiento en una query
+[620.5 | sz=14.7] que presente una negación.
+[605.9 | sz=14.7] 4. "mujer con sombrero pero sin lentes": Otro ejemplo con negación para profundizar
+[591.4 | sz=14.7] en funcionamiento con reranking.
+[576.8 | sz=14.7] Además de resultados cualitativos mediante la observación de imágenes y cómo mejora de
+[562.3 | sz=14.7] un modelo a otro, se visualizará el funcionamiento del LLM, se calcularán métricas de
+[547.7 | sz=14.7] precisión@10 utilizando las annotations y se calculará el promedio de score obtenido por
+[533.2 | sz=14.7] modelo.
+[518.7 | sz=14.7] Para todos estos prompts se realizó análisis y comparación con dos formas de usar LLM
+[504.1 | sz=14.7] pero los mismos prompts:
+[489.6 | sz=14.7] ● Temperatura 0,3 y do_sample True (Modelo 0.3)
+[475.0 | sz=14.7] ● Temperatura 0 y do_sample False (Modelo 0)
+[460.5 | sz=14.7] Las visualizaciones de imágenes se realizarán solamente con modelo 0,3 para facilidad de
+[445.9 | sz=14.7] lectura.
+[431.4 | sz=14.7] Nota: En caso de querer visualizar todas las imágenes encontradas con el método de
+[416.8 | sz=14.7] reranking para las 40 queries de submission, las mismas se encuentran en el notebook.
+[40.0 | sz=14.7] 10
+
+==================== PAGE 12 ====================
+[757.8 | sz=17.3] Query “gato”
+[730.5 | sz=14.7] Modelo 0.3
+[40.0 | sz=14.7] 11
+
+==================== PAGE 13 ====================
+[753.7 | sz=14.7] Modelo 0
+[451.0 | sz=17.3] Query “persona trabajando en la computadora y con un gato”
+[423.7 | sz=14.7] Modelo 0.3
+[40.0 | sz=14.7] 12
+
+==================== PAGE 14 ====================
+[441.6 | sz=14.7] Modelo 0
+[40.0 | sz=14.7] 13
+
+==================== PAGE 15 ====================
+[757.8 | sz=17.3] Query “caballo blanco corriendo sin jinete”
+[715.9 | sz=14.7] Modelo 0.3
+[40.0 | sz=14.7] 14
+
+==================== PAGE 16 ====================
+[451.0 | sz=14.7] Modelo 0
+[40.0 | sz=14.7] 15
+
+==================== PAGE 17 ====================
+[681.6 | sz=17.3] Query “mujer con sombrero pero sin lentes”
+[639.8 | sz=14.7] Modelo 0.3
+[40.0 | sz=14.7] 16
+
+==================== PAGE 18 ====================
+[514.7 | sz=14.7] Modelo 0
+[40.0 | sz=14.7] 17
+
+==================== PAGE 19 ====================
+[751.2 | sz=26.7] Conclusiones de resultados
+[727.2 | sz=14.7] En las dos primeras queries evaluadas, se puede visualizar que el modelo con reranking
+[712.7 | sz=14.7] obtiene mayor valor de puntuación, seguido por el modelo de reformulación y luego la
+[698.1 | sz=14.7] traducción del query original. Esto es esperable ya que es el orden de modelos más
+[683.6 | sz=14.7] robustos a menos.
+[669.0 | sz=14.7] Sin embargo, en las negaciones se pueden visualizar diferencias sustanciales.
+[654.5 | sz=14.7] El score promedio disminuye en gran medida, pero se puede observar cómo las imágenes
+[640.0 | sz=14.7] encontradas se acercan más a la query solicitada. Esta disminución del score se debe a la
+[625.4 | sz=14.7] técnica de penalización utilizada, que siempre termina penalizando a los prompts positivos
+[610.9 | sz=14.7] aunque no presenten de manera explícita el concepto negativo. Por el funcionamiento de
+[596.3 | sz=14.7] CLIP, hay múltiples dimensiones semánticas que se contemplan y que terminan afectando a
+[581.8 | sz=14.7] la similitud de las imágenes con sus textos.
+[567.2 | sz=14.7] Sin embargo, analizando las imágenes obtenidas, se ve cómo los topk mejoran y se
+[552.7 | sz=14.7] penalizan a los conceptos que se toman como negativos, dejando imágenes que cumplen
+[538.1 | sz=14.7] con el criterio de la query original o tienen un score relativo mejor a las que contienen
+[523.6 | sz=14.7] conceptos negados.
+[509.0 | sz=14.7] Los scores a fin de cuenta son un valor de comparación relativo, ya que es casi imposible
+[494.5 | sz=14.7] que se obtenga un valor de 1 en los mismos.
+[451.5 | sz=26.7] Métrica de evaluación mediante descomposición y
+[425.1 | sz=26.7] unión de conjuntos
+[401.1 | sz=14.7] Se plantea un esquema de evaluación de un ground truth aproximado para consultas
+[386.5 | sz=14.7] complejas con múltiples componentes obteniendo resultados parciales de cada uno, y
+[372.0 | sz=14.7] realizando intersecciones entre dichos conjuntos.
+[357.4 | sz=14.7] Finalmente, se realiza una búsqueda del prompt complejo y se observa cuántas imágenes
+[342.9 | sz=14.7] son comunes al conjunto del prompt complejo y al conjunto de la intersección de
+[328.3 | sz=14.7] componentes.
+[313.8 | sz=14.7] Los prompts utilizados son los siguientes:
+[193.0 | sz=14.7] Como los conceptos descompuestos pueden ser muy amplios y no tener en un principio
+[178.5 | sz=14.7] relación con otros, utilizamos una búsqueda de 4000 candidatos para quedarse con los
+[163.9 | sz=14.7] 2000 mejores de cada conjunto individual.
+[149.4 | sz=14.7] A estos, les realizamos una intersección con los conjuntos de conceptos descompuestos y
+[134.8 | sz=14.7] obtenemos la cantidad de imágenes que cumplen el rol de ground truth aproximado.
+[120.3 | sz=14.7] Realizamos dos búsquedas, cambiando los parámetros de la búsqueda del conjunto
+[105.7 | sz=14.7] compuesto para tener una idea general de las imágenes que cumplen con las prompts
+[91.2 | sz=14.7] creadas.
+[40.0 | sz=14.7] 18
+
+==================== PAGE 20 ====================
+[759.7 | sz=14.7] top_k = 10 k_candidates = 1000
+[448.1 | sz=14.7] top_k = 1000 k_candidates = 2000 comp
+[134.3 | sz=14.7] El valor IoU no tiene mucho valor por sí mismo ya que pueden haber múltiples imágenes
+[119.7 | sz=14.7] que queden por fuera. Lo que realmente vale es ver la intersección entre el conjunto
+[105.2 | sz=14.7] compuesto y el conjunto de descomposiciones.
+[90.7 | sz=14.7] Además, dependiendo de la cantidad de top_k que se utilicen varía. Sin embargo,
+[76.1 | sz=14.7] tomaremos el top_k = 10, como usamos a lo largo del desarrollo del trabajo.
+[40.0 | sz=14.7] 19
+
+==================== PAGE 21 ====================
+[745.6 | sz=34.7] Discusión y análisis crítico
+[722.3 | sz=14.7] ¿Qué funcionó bien?:
+[693.2 | sz=14.7] ● Utilización de temperatura 0 y do_sample = False en LLM: Esta decisión se tomó
+[678.7 | sz=14.7] debido a que con temperatura 0,3 y do_sample = True, a veces el LLM de
+[664.1 | sz=14.7] reformulación confundía la orden (El prompt) por la query a buscar.
+[649.6 | sz=14.7] ● Sin embargo, esta creatividad extra que se le permite al LLM permite una variación
+[635.0 | sz=14.7] semántica mayor, por lo que se incluyeron resultados con su funcionamiento. Esto
+[620.5 | sz=14.7] también lleva a variaciones sutiles en cada ejecución de búsquedas, incluso para las
+[605.9 | sz=14.7] mismas queries.
+[591.4 | sz=14.7] ● Incluir ejemplos esperados de comportamiento en el prompt de reranking del LLM
+[576.8 | sz=14.7] mejoró mucho la estabilidad del mismo, lo que permitió tener un manejo de
+[562.3 | sz=14.7] negaciones aceptable.
+[533.2 | sz=14.7] ¿Qué intentos no funcionaron y por qué?:
+[504.1 | sz=14.7] ● No todas las imágenes están correctamente etiquetadas en Annotations, por lo que
+[489.6 | sz=14.7] las métricas de precisión no son del todo aplicables. Por ejemplo, en el análisis para
+[475.0 | sz=14.7] “persona trabajando en la computadora y con un gato”, múltiples imágenes tenían
+[460.5 | sz=14.7] solamente la etiqueta de “cat” sin contar con la de “person”, por lo que se modificó la
+[445.9 | sz=14.7] estrategía para encontrar ALGUNA de las etiquetas esperadas, en vez de todas.
+[431.4 | sz=14.7] ● Se barajó la posibilidad de utilizar otros LLM como TinyLlama, pero no se pudo
+[416.8 | sz=14.7] integrar en el entorno de Kaggle, por lo que se optó por phi3mini.
+[402.3 | sz=14.7] ● El prompt realizado a los LLM fue una de las grandes fuentes de problemas del
+[387.7 | sz=14.7] trabajo. Hasta encontrar un prompt lo suficientemente robusto y flexible que
+[373.2 | sz=14.7] permitiera tener resultados aceptables, el mismo pasó por múltiples iteraciones.
+[358.6 | sz=14.7] ● Se realizó PCA en embeddings y en uso de índices con el propósito de reducir ruido,
+[344.1 | sz=14.7] pero a la hora de realizar las búsquedas los resultados no tenían coherencia con el
+[329.6 | sz=14.7] query planteado, por lo que se descartó completamente del trabajo. Posiblemente se
+[315.0 | sz=14.7] deba a que se perdían más detalles de lo esperado. Se probó reducir a 50
+[300.5 | sz=14.7] dimensiones y a 256, pero en ambos casos los resultados no tenían sentido.
+[256.8 | sz=14.7] Limitaciones del enfoque:
+[227.7 | sz=14.7] ● Como se mencionó previamente, la principal limitación fue el LLM. El realizar un
+[213.2 | sz=14.7] prompt que contemple todo lo necesario y que involucre el análisis semántico
+[198.6 | sz=14.7] deseado, escapa de las capacidades de un modelo liviano.
+[184.1 | sz=14.7] Se busca un balance entre que el prompt dé resultados sin que el mismo sea de
+[169.5 | sz=14.7] gran longitud, ya que el modelo no lo soporta.
+[40.0 | sz=14.7] 20
+
+==================== PAGE 22 ====================
+[745.6 | sz=34.7] Trabajo futuro
+[722.3 | sz=14.7] Algunas posibles mejoras que nos parece interesante realizar son:
+[693.2 | sz=14.7] ● Utilizar un modelo de lenguaje más avanzado, que tenga mayores capacidades de
+[678.7 | sz=14.7] comprensión semántica. Sería interesante ver hasta qué punto se podría mejorar la
+[664.1 | sz=14.7] similitud y qué tan preciso se puede hacer una query.
+[649.6 | sz=14.7] ● Realizar un prompt robusto que ayude a tener un análisis semántico mucho mayor
+[635.0 | sz=14.7] de las frases, y que pueda detectar negativos de manera confiable.
+[620.5 | sz=14.7] ● Con más tiempo nos habría gustado realizar más métricas que no involucren las
+[605.9 | sz=14.7] annotations, ver hasta qué punto se puede llegar a generar métricas cuantitativas
+[591.4 | sz=14.7] que no requieran de comparar visualmente las imágenes.
+[576.8 | sz=14.7] ● Realizar pruebas con otros LLM que estén más especializados.
+[562.3 | sz=14.7] ● Realizar pruebas con modelos de CLIP que tengan más dimensionalidad, para
+[547.7 | sz=14.7] analizar, como en el primer punto, hasta qué punto se puede tener un embedding y
+[533.2 | sz=14.7] una query más compleja que represente conceptos semánticos específicos.
+[490.0 | sz=34.7] Conclusión
+[466.7 | sz=14.7] En este trabajo práctico de la materia de inteligencia artificial, se realizó una pipeline
+[452.2 | sz=14.7] completo para un sistema de búsqueda multimodal de imágenes utilizando las tecnologías
+[437.6 | sz=14.7] CLIP para la conversión de imágenes y texto a embeddings que contienen el significado
+[423.1 | sz=14.7] semántico de los mismos, FAISS para la creación de índices y un LLM para la traducción,
+[408.5 | sz=14.7] reformulación y detección de negativos en una serie de queries planteadas en el dataset
+[394.0 | sz=14.7] Pascal 2012 VOC y otras planteadas por la cátedra.
+[379.4 | sz=14.7] El trabajo incluyó la creación de métricas propias para la similitud entre imágenes y prompts
+[364.9 | sz=14.7] complejas, y es un trabajo integral que nos permitió ver en profundidad el funcionamiento y
+[350.4 | sz=14.7] la utilidad del uso de modelos de lenguaje y redes neuronales.
+[40.0 | sz=14.7] 21
