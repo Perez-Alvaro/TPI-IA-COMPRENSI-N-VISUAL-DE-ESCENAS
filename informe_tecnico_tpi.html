@@ -332,6 +332,23 @@ td.center, th.center {
     margin-top: 20pt;
 }
 </style>
+
+<link rel="stylesheet" href="report_assets/katex/katex.min.css">
+<script defer src="report_assets/katex/katex.min.js"></script>
+<script defer src="report_assets/katex/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    renderMathInElement(document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "\\(", right: "\\)", display: false}
+        ],
+        throwOnError: false
+    });
+});
+</script>
 </head>
 <body>
 
