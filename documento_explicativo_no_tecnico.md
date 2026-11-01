@@ -94,8 +94,10 @@ Para que una máquina realmente **comprenda** una escena visual, debe ser capaz 
 4. **¿Cómo podemos razonar sobre la escena?** (*Preguntas y respuestas visuales - VQA*): Responder preguntas en lenguaje natural (como *"¿Cuántas sillas rodean a la mesa?"* o *"¿Hay una botella roja a la derecha del monitor?"*) sin inventar datos y con certeza absoluta.
 
 ### El Desafío del Mundo Real: Un Universo de Objetos Diminutos
-En el mundo real las escenas no son fotos de estudio prolijas. En nuestro conjunto de datos de estudio (compuesto por escenas cotidianas con un promedio de casi 15 objetos por fotografía y picos de más de 40 objetos hacinados):
-- **El 71,06% de los objetos son diminutos:** Ocupan menos del 1% del área total de la imagen (como una taza al fondo de un salón, un picaporte, una llave o una fruta lejana).
+En el mundo real las escenas no son fotos de estudio prolijas. En nuestro conjunto de datos de estudio (compuesto por 120 imágenes de desarrollo con un total de **1.790 anotaciones** de referencia y un promedio de casi 15 objetos por fotografía, con picos de más de 40 objetos hacinados):
+- **Objetos pequeños (`small`):** El **71,06% de las instancias (1.272 objetos)** son diminutos y ocupan menos del 1% del área total de la imagen (como una taza al fondo de un salón, un picaporte, una llave o una fruta lejana).
+- **Objetos medianos (`medium`):** El **24,02% de las instancias (430 objetos)** tienen un tamaño moderado, ocupando entre el 1% y el 10% de la escena visual.
+- **Objetos grandes (`large`):** Apenas el **4,92% de las instancias (88 objetos)** superan el 10% del área de la imagen (muebles principales, vehículos en primer plano o personas completas).
 - **Oclusiones severas:** Los objetos se tapan parcialmente entre sí. Un libro tapa parte de una mesa; una persona sostiene un teléfono ocultando la mitad de su superficie.
 - **Ambigüedad y texturas:** ¿Es esa luminaria urbana un semáforo o una farola? ¿Es ese adorno de piedra un perro real o una estatua decorativa?
 
@@ -264,7 +266,7 @@ Tener un montón de siluetas recortadas en una mesa sigue sin ser suficiente. Si
 El **Cartógrafo Espacial** toma las siluetas, calcula su centro de gravedad exacto y dibuja una cuadrícula formal sobre la escena, como si colocara un tablero de ajedrez gigante sobre la imagen.
 
 #### Cómo Opera en Nuestro Sistema
-El cartógrafo ejecuta tres operaciones sistemáticas:
+El cartógrafo ejecuta tres operaciones sistemáticas para estructurar el plano digital `SceneJSON`, completando toda la organización espacial y de atributos en apenas **0,28 segundos** (0.28s) por fotografía:
 1. **La Cuadrícula 3×3:** Divide la imagen en 9 regiones normalizadas:
    - Fila Superior: `arriba a la izquierda` (`top_left`), `arriba al centro` (`top_center`), `arriba a la derecha` (`top_right`).
    - Fila Central: `medio a la izquierda` (`middle_left`), `centro absoluto` (`center`), `medio a la derecha` (`middle_right`).

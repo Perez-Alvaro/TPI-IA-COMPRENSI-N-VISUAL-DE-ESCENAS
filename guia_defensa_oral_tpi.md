@@ -53,7 +53,7 @@ El tribunal docente evaluará con cronómetro en mano: el tiempo máximo de expo
 - **Objetivo:** Captar inmediatamente la atención del tribunal, plantear los objetivos de la cátedra y justificar por qué las particularidades del dataset condicionaron toda la ingeniería posterior.
 - **Puntos clave de intervención:**
   1. *Planteo formal:* Construcción de un pipeline modular auditable para transformar imágenes RGB en un grafo de escena computable (`SceneJSON`) y responder consultas visuales (VQA) deterministas y mediante LLM.
-  2. *Hallazgo crítico del EDA:* El dataset de desarrollo (120 imágenes, 1.790 instancias, 120 categorías) presenta un **desbalance geométrico extremo**: el **71,06% de las instancias son objetos pequeños (`small`)** con área relativa $< 1\%$ de la escena (mediana del área: $0,61\%$).
+  2. *Hallazgo crítico del EDA:* El dataset de desarrollo (120 imágenes, 1.790 instancias, 120 categorías) presenta un **desbalance geométrico extremo**: el **71,06% son objetos pequeños (`small`, 1.272 instancias)** con área relativa $< 1\%$ de la escena (mediana: $0,61\%$), el **24,02% son objetos medianos (`medium`, 430 instancias)** entre 1% y 10%, y el **4,92% son objetos grandes (`large`, 88 instancias)** con $\ge 10\%$ del área total.
   3. *Complejidad visual:* Promedio de 14,92 objetos/imagen con picos que superan los 40 y 60 objetos en escenas hacinadas.
   4. *La trampa de LVIS:* Explicar por qué LVIS requiere una **política de evaluación federada**: al no haber anotación exhaustiva, predecir una clase no verificada no se penaliza como Falso Positivo para no castigar al modelo por descubrir instancias omitidas por los anotadores humanos.
 - **Frase de transición:** *"Para resolver este desafío perceptivo sin caer en cajas negras multimodales, Valentina y Manuel explicarán la arquitectura modular de 5 estadios que implementamos."*
@@ -156,6 +156,13 @@ Llevar estos números memorizados al examen:
 | **Score Oficial Kaggle (Test)** | **0,6615** | **0,6763** | **0,6800** | $\mathbf{+0,0185}$ | Top Benchmark |
 | **Latencia Total End-to-End** | $\approx 1,25\text{ s/img}$ | $\approx 1,25\text{ s/img}$ | **$3,25\text{ s/img}$** | $+2,00\text{ s}$ ($2,6\times$) | Operable en GPU T4 |
 | **Desglose Latencia V3** | OWLv2: 2,44s (75%) \| SAM2: 0,43s (13%) \| SceneJSON: 0,28s (9%) \| Valid: 0,09s (3%) | — | — |
+
+#### Resumen Estadístico del Dataset (EDA Cheat-Sheet de Bolsillo):
+- **Total de Instancias Ground Truth:** **1.790 anotaciones** distribuidas en 120 imágenes de desarrollo (media: 14,92 obj/imagen).
+- **Objetos Pequeños (`small`, área $< 1\%$):** **71,06% (1.272 instancias)** — Mediana de área relativa: 0,61% (cuello de botella de resolución).
+- **Objetos Medianos (`medium`, área $1\% - 10\%$):** **24,02% (430 instancias)** — Recall sostenido en 0,765.
+- **Objetos Grandes (`large`, área $\ge 10\%$):** **4,92% (88 instancias)** — Salvaguarda adaptativa con `conf_large = 0.15`.
+- **Anotación Federada LVIS:** 118 declaraciones de ausencia (`neg_category_ids`) en 74 imágenes y 47 declaraciones no exhaustivas.
 
 ---
 
@@ -483,6 +490,97 @@ Organizado en 7 bloques temáticos rigurosos con formulación matemática y refe
      Añade la norma del valor absoluto:
      $$\mathcal{L}_{\text{total}} = \mathcal{L}_0(\theta) + \lambda \sum_i |w_i|, \qquad \frac{\partial \mathcal{L}_{\text{total}}}{\partial w_i} = \frac{\partial \mathcal{L}_0}{\partial w_i} + \lambda \cdot \text{sign}(w_i)$$
      A diferencia de $L_2$ (cuya fuerza de contracción disminuye cuando el peso se acerca a cero), $L_1$ ejerce una fuerza de arrastre constante $\lambda$ sin importar cuán pequeño sea el peso. Esto empuja numéricamente coeficientes irrelevantes exactamente a cero, induciendo **esparcidad (*sparsity*)** y actuando como un mecanismo implícito de selección de características."
+
+#### Pregunta G.6: "Explique la operación de Convolución 2D discreta, el concepto de Campo Receptivo (Receptive Field) y cómo se estructuran las jerarquías visuales en visión computacional."
+- **Respuesta Técnica Fundamentada:**  
+  "En visión por computadora y redes neuronales convolucionales (CNNs), la convolución 2D discreta aplica un kernel o filtro parametrizado $W \in \mathbb{R}^{m \times n}$ sobre un mapa de características de entrada $M$:
+  $$\text{Conv}(W, M)_{ij} = (W * M)_{ij} = \sum_{u=1}^m \sum_{v=1}^n W_{uv} \cdot M_{i+u-1, j+v-1}$$
+  Esta operación introduce dos propiedades inductivas fundamentales: **compartición de pesos** (*weight sharing*) e **invarianza local por traslación**.  
+  
+  *Campo Receptivo (Receptive Field):*  
+  El campo receptivo de una neurona en la capa $l$ es la región espacial de la imagen de entrada original que influye en su activación. Crece inductivamente capa tras capa en función del tamaño del kernel $K_l$ y el stride acumulado:
+  $$RF_l = RF_{l-1} + (K_l - 1) \cdot \prod_{i=1}^{l-1} S_i$$
+  - **Jerarquía Biológica (Hubel y Wiesel / Neocognitron de Fukushima):** En las capas iniciales, los campos receptivos son diminutos (ej. $3 \times 3$ o $5 \times 5$ px), emulando las *células simples* de la corteza visual primaria que detectan gradientes de borde, líneas orientadas y texturas elementales.
+  - A medida que se profundiza en la red mediante convoluciones sucesivas y submuestreo, el campo receptivo se expande hasta abarcar la escena completa, emulando las *células complejas* que reconocen partes de objetos y conceptos semánticos abstractos.
+  - *Contraste con Vision Transformers (OWLv2):* A diferencia de las CNNs donde el campo receptivo crece gradualmente, el mecanismo de auto-atención multi-cabeza (MHSA) de ViT conecta todos los parches espaciales entre sí desde la primera capa, otorgando un **campo receptivo global inmediato**, pero exigiendo preentrenamiento masivo al carecer del sesgo inductivo de localidad espacial."
+
+#### Pregunta G.7: "Compare los distintos tipos de Pooling (Max, Average y Global Pooling) y explique su rol en la reducción dimensional y la invarianza espacial."
+- **Respuesta Técnica Fundamentada:**  
+  "El submuestreo o *pooling* reduce progresivamente la resolución espacial de los mapas de características intermedias $(H \times W \to \frac{H}{s} \times \frac{W}{s})$, reduciendo drásticamente la carga computacional y el número de parámetros de las capas densas subsecuentes, mitigando el sobreajuste.
+  
+  1. **Max Pooling:**  
+     Extrae el valor máximo dentro de una ventana local $p \times p$:
+     $$y_{ij} = \max_{u, v \in [1, p]} x_{i \cdot s + u, j \cdot s + v}$$
+     *Propiedad:* Preserva las activaciones de mayor intensidad (características más prominentes como bordes nítidos, esquinas y contrastes fuertes). Aporta **invarianza local ante pequeñas traslaciones y deformaciones**: si un rasgo se desplaza uno o dos píxeles dentro de la ventana, la activación máxima de salida permanece inalterada.
+  
+  2. **Average Pooling:**  
+     Calcula la media aritmética de los elementos de la ventana:
+     $$y_{ij} = \frac{1}{p^2} \sum_{u=1}^p \sum_{v=1}^p x_{i \cdot s + u, j \cdot s + v}$$
+     *Propiedad:* Suaviza la respuesta espacial reteniendo información estadística del contexto y texturas homogéneas, pero atenúa características de bordes abruptos.
+  
+  3. **Global Average / Max Pooling (GAP / GMP):**  
+     Colapsa la totalidad de la dimensión espacial $H \times W$ a un único escalar por canal ($1 \times 1 \times C$):
+     $$\text{GAP}_c = \frac{1}{H \cdot W} \sum_{i=1}^H \sum_{j=1}^W x_{ijc}$$
+     Introducido en arquitecturas modernas (Network in Network, ResNet) para reemplazar las capas completamente conectadas (FC) finales, eliminando millones de parámetros y volviendo a la red totalmente independiente del tamaño de resolución de entrada."
+
+#### Pregunta G.8: "¿Qué es el Problema de Desvanecimiento del Gradiente (Vanishing Gradient), por qué ocurre con funciones sigmoideas y cómo lo resuelven ReLU y las Conexiones Residuales (ResNet / Hiera en SAM2)?"
+- **Respuesta Técnica Fundamentada:**  
+  "Durante el entrenamiento mediante retropropagación (*backpropagation*), el gradiente de la función de pérdida $\mathcal{L}$ respecto a los pesos de una capa inicial $w_1$ se calcula aplicando recursivamente la regla de la cadena:
+  $$\frac{\partial \mathcal{L}}{\partial w_1} = \frac{\partial \mathcal{L}}{\partial a_L} \cdot \prod_{l=2}^L \left( \frac{\partial a_l}{\partial z_l} \cdot \frac{\partial z_l}{\partial a_{l-1}} \right) \cdot \frac{\partial z_1}{\partial w_1}$$
+  donde $\frac{\partial a_l}{\partial z_l} = \sigma'(z_l)$ es la derivada de la función de activación.
+  
+  *Causa del Desvanecimiento:*  
+  En funciones saturantes clásicas como la sigmoide $\sigma(z) = \frac{1}{1 + e^{-z}}$, su derivada alcanza un valor máximo de apenas $\sigma'(0) = 0,25$ y decae asintóticamente a cero para $|z| > 4$. Al multiplicar decenas de términos acotados por $0,25$, el gradiente decrece exponencialmente ($0,25^L \to 0$), congelando el aprendizaje de las capas tempranas.
+  
+  *Soluciones Teóricas Canónicas:*
+  1. **Funciones No Saturantes (ReLU / Leaky ReLU):**  
+     $$\text{ReLU}(z) = \max(0, z), \qquad \text{ReLU}'(z) = \begin{cases} 1 & z > 0 \\ 0 & z \le 0 \end{cases}$$
+     Para activaciones positivas, la derivada es exactamente $1$, permitiendo que el gradiente fluya sin atenuarse a través de capas profundas.
+  2. **Conexiones Residuales (*Skip Connections* / He et al., ResNet 2015):**  
+     En lugar de forzar a las capas intermedias a aprender un mapeo directo $H(x)$, un bloque residual aprende una función residual $F(x) = H(x) - x$, reformulando la salida como:
+     $$y = F(x, \{W_i\}) + x$$
+     Al calcular el gradiente respecto a la entrada:
+     $$\frac{\partial \mathcal{L}}{\partial x} = \frac{\partial \mathcal{L}}{\partial y} \cdot \left( \frac{\partial F}{\partial x} + \mathbf{1} \right)$$
+     El término aditivo $+1$ actúa como una **superautopista para el gradiente**: incluso si el gradiente a través de las capas parametrizadas $\frac{\partial F}{\partial x}$ tiende a cero, el gradiente directo $\frac{\partial \mathcal{L}}{\partial y} \cdot 1$ fluye intacto hacia las capas iniciales sin desvanecerse.  
+     *Aplicación en el TPI:* La arquitectura *Hiera-Small* empleada en SAM2 (`sam2_hiera_small.pt`) es un Vision Transformer jerárquico que integra estos principios residuales multiescala, permitiendo entrenar decodificadores de máscaras ultraprofundos con alta fidelidad a nivel de píxel."
+
+#### Pregunta G.9: "Compare rigurosamente el paradigma de detección YOLO (One-Stage) frente a los Vision Transformers Multimodales (OWLv2 Open-Vocabulary)."
+- **Respuesta Técnica Fundamentada:**  
+  "El desarrollo de detectores modernos de objetos presenta dos grandes filosofías de ingeniería:
+  
+  1. **Paradigma YOLO (You Only Look Once / Redmon et al., 2015):**  
+     - *Mecánica:* Divide la imagen en una cuadrícula fija de $S \times S$ celdas. Si el centro de un objeto cae en una celda, esa celda es responsable de predecir $B$ bounding boxes, sus coordenadas $[x, y, w, h]$, un factor de objetidad (*objectness*) y las probabilidades condicionales de clase $P(C_i | \text{Obj})$ para un conjunto cerrado de $K$ clases predefinidas.
+     - *Optimización:* Evalúa todo en una **única pasada hacia adelante** (*one-stage*), optimizando una función de pérdida multi-tarea combinada (error cuadrático en coordenadas + entropía cruzada en clases). Emplea Non-Maximum Suppression (NMS) para suprimir cajas duplicadas.
+     - *Fortaleza / Limitación:* Extremadamente veloz (adecuado para tiempo real a 60+ FPS), pero restringido a un vocabulario estático cerrado y con dificultad histórica para detectar objetos pequeños hacinados en la misma celda de la grilla.
+  
+  2. **Paradigma Vision Transformer Multimodal Open-Vocabulary (OWLv2 / Minderer et al., 2022):**  
+     - *Mecánica:* No posee una cabeza de clasificación fija ni predice sobre clases discretas cerradas. Descompone la imagen en parches espaciales proyectados como tokens visuales procesados por capas de auto-atención global (ViT-B/16).
+     - *Alineación Multimodal:* Un codificador de texto procesa consultas arbitrarias en lenguaje natural (ej. *'a photo of a {category}'* para 120 clases). Las predicciones de caja y clase se obtienen calculando la similitud coseno escalada entre los embeddings visuales de parches y los embeddings textuales en un espacio latente conjunto preentrenado contrastivamente (estilo CLIP).
+     - *Fortaleza / Limitación:* Vocabulario ilimitado y capacidad de transferencia de disparo cero (*zero-shot*), resolviendo problemas con cola larga (LVIS) sin requerir reentrenamiento supervisado, a costa de mayor latencia computacional (2,44s por imagen frente a los ~20ms de YOLO)."
+
+#### Pregunta G.10: "Enmarque el sistema desarrollado dentro de la Teoría de Agentes Inteligentes (Russell & Norvig / Unidad 1): Describa el marco REAS/PEAS, caracterice las propiedades del entorno y justifique por qué es un Agente Reactivo Basado en Modelos."
+- **Respuesta Técnica Fundamentada:**  
+  "De acuerdo con los fundamentos canónicos de la Unidad 1 de la materia (`IA-Resumen-Completo.pdf` y Russell & Norvig):
+  
+  1. **Marco REAS (PEAS en inglés):**
+     - **Rendimiento (Performance):** Métrica combinada de calidad oficial de la cátedra:
+       $$\text{PipelineScore} = 0,40 \cdot F_{1,\text{box}} + 0,35 \cdot F_{1,\text{mask}} + 0,15 \cdot \text{Consistencia} + 0,10 \cdot \text{Exactitud}_{\text{QA}}$$
+     - **Entorno (Environment):** Fotografías bidimensionales RGB del dataset de desarrollo y prueba en Kaggle con alta complejidad visual, oclusiones y anotación federada LVIS.
+     - **Actuadores (Actuators):** Generación y serialización del archivo estructurado `SceneJSON` (con máscaras RLE y relaciones topológicas), exportación del `submission.csv` y emisión de respuestas textuales auditables.
+     - **Sensores (Sensors):** Matriz de píxeles capturada del archivo de imagen (canales RGB) y el flujo de texto de las preguntas de usuario en lenguaje natural.
+  
+  2. **Propiedades del Entorno de Trabajo:**
+     - **Parcialmente Observable:** El agente no posee información total del estado físico del mundo debido a oclusiones mutuas entre objetos, sombras, objetos fuera de encuadre y anotaciones federadas incompletas.
+     - **Determinista en Razonamiento / Estocástico en Percepción:** La inferencia neuronal de punto flotante opera en modo determinista estricto fijando semillas (`seed = 42`, `temperature = 0.0`), y la ejecución simbólica de consultas sobre el grafo JSON es 100% determinista.
+     - **Episódico:** Cada imagen constituye un episodio atómico e independiente. La percepción o respuesta en la imagen $t$ no afecta el estado interno ni condiciona la inferencia en la imagen $t+1$.
+     - **Estático:** La escena visual no muta ni evoluciona en el tiempo mientras los algoritmos de detección, segmentación y VQA están deliberando.
+     - **Híbrido Continuo/Discreto:** Continuo en la fase perceptiva (coordenadas numéricas de cajas flotantes en $[0, 1]$, probabilidades de confianza y tensores de píxeles) y discreto en la representación simbólica (grilla topológica $3 \times 3$, conteos enteros y clases semánticas).
+  
+  3. **Tipología de Agente: Agente Reactivo Basado en Modelos:**  
+     Un *agente reactivo simple* con mapeo directo entrada $\to$ salida (como un VLM end-to-end opaco) colapsa ante oclusiones y falta de observabilidad. Nuestro sistema es formalmente un **Agente Basado en Modelos**:
+     - Mantiene un **estado interno explícito del mundo físico**: el grafo estructurado `SceneJSON`.
+     - Este estado interno modela 'cómo está el mundo ahora' (qué objetos existen, cuáles son sus contornos exactos, en qué región de la grilla 3x3 yacen y cómo se relacionan espacialmente).
+     - Desacoplar la percepción continua de la actualización del modelo interno garantiza que el subsistema de razonamiento consulte hechos cristalizados, impidiendo alucinaciones y permitiendo auditar matemáticamente cada respuesta."
 
 ---
 

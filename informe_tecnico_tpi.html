@@ -523,7 +523,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </div>
 
 <p>
-    Como se desprende de la <strong>Figura 3</strong>, el hecho de que más de 7 de cada 10 objetos sean de escala pequeña impone un desafío arquitectónico insoslayable: los Vision Transformers particionan la entrada en parches rígidos de $16 \times 16$ píxeles. A una resolución típica de $960 \times 960$, un objeto menor al $1\%$ cubre escasos 10 a 15 parches, perdiendo gradientes de borde y generando omisiones sistemáticas si no se incorporan mecanismos de aumento de resolución local.
+    Como se desprende de la <strong>Figura 3</strong> y de la tabla de distribución, sobre un total de <strong>1.790 instancias de ground truth</strong>, la distribución por escala comprende: objetos pequeños (<code>small</code>, &lt; 1% del área) con el <strong>71.06% (1.272 instancias)</strong>, objetos medianos (<code>medium</code>, 1% a 10%) con el <strong>24.02% (430 instancias)</strong> y objetos grandes (<code>large</code>, ≥ 10%) con el <strong>4.92% (88 instancias)</strong>. Este severo sesgo impone un desafío arquitectónico insoslayable: los Vision Transformers particionan la entrada en parches rígidos de $16 \times 16$ píxeles. A una resolución típica de $960 \times 960$, un objeto menor al $1\%$ cubre escasos 10 a 15 parches, perdiendo gradientes de borde y generando omisiones sistemáticas si no se incorporan mecanismos de aumento de resolución local.
 </p>
 
 <h2>2.3. Mecánica de la Política de Anotación Federada LVIS</h2>
@@ -800,6 +800,9 @@ document.addEventListener("DOMContentLoaded", function() {
         </tr>
     </tbody>
 </table>
+<p style="font-size: 9.5pt; color: #4b5563; margin-top: -6pt; margin-bottom: 12pt;">
+    <em>*Nota de calibración intermedia: Previo al ajuste fino de umbral para objetos grandes (<code>conf_large = 0.15</code> en Sección 12.1 del notebook), el paso intermedio de V3 alcanzó Box F1: <strong>0.6641</strong> y Mask F1: <strong>0.6273</strong> (Exactitud QA Det: <strong>0.7895</strong>, Exactitud QA LLM: <strong>0.5263</strong>, Score Proxy Local: <strong>0.7010</strong>). La calibración adaptativa final consolidó Box F1 en <strong>0.6722</strong>, Mask F1 en <strong>0.6351</strong> y Exactitud QA LLM en <strong>0.5526</strong>.</em>
+</p>
 
 <h2>4.2. Análisis de Curvas de Operación bajo Política LVIS</h2>
 <p>

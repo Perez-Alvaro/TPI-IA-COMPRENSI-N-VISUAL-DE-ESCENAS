@@ -97,7 +97,7 @@ Siguiendo los lineamientos de la cátedra, se discretizó el tamaño de los obje
 
 ![Figura 3: Distribución de escala relativa de los objetos](report_assets/fig3_eda_escala.png)
 
-Como se cuantifica en la **Figura 3**, el **71.06% de todas las instancias anotadas (1.272 de 1.790)** corresponde a la categoría `small`. Este sesgo estructural condiciona decisivamente la arquitectura del pipeline: los modelos basados en Vision Transformers (ViT) dividen la imagen en parches fijos (típicamente $16 \times 16$ px). Un objeto que ocupa menos del 1% de una imagen de $640 \times 480$ píxeles abarca un área de apenas $\approx 3.000\text{ px}^2$, lo que equivale a escasos 10 o 12 parches del transformer. Si el detector procesa la imagen a resolución reducida, la información de alta frecuencia espacial se pierde irreversiblemente, provocando una masiva tasa de falsos negativos.
+Como se cuantifica en la **Figura 3**, sobre el total de **1.790 instancias de ground truth**, la distribución por escala se desglosa en: objetos pequeños (`small`, área $< 1\%$) con **71.06% (1.272 instancias)**, objetos medianos (`medium`, área $1\% - 10\%$) con **24.02% (430 instancias)**, y objetos grandes (`large`, área $\ge 10\%$) con **4.92% (88 instancias)**. Este sesgo estructural condiciona decisivamente la arquitectura del pipeline: los modelos basados en Vision Transformers (ViT) dividen la imagen en parches fijos (típicamente $16 \times 16$ px). Un objeto que ocupa menos del 1% de una imagen de $640 \times 480$ píxeles abarca un área de apenas $\approx 3.000\text{ px}^2$, lo que equivale a escasos 10 o 12 parches del transformer. Si el detector procesa la imagen a resolución reducida, la información de alta frecuencia espacial se pierde irreversiblemente, provocando una masiva tasa de falsos negativos.
 
 ## 2.3. Mecánica de la Política de Anotación Federada LVIS
 
@@ -366,6 +366,8 @@ A continuación se resume la matriz completa de desempeño en la **Tabla 1**:
 | **Exactitud QA LLM** | 0.4211 | 0.4211 | **0.5526** | **$+0.1315$** ($+31.2\%$) | Impacto del bucle de reintento en JSON |
 | **Score Proxy Local** | 0.6745 | 0.6810 | **0.7083** | **$+0.0338$** | $0.40 F1_b + 0.35 F1_m + 0.15 Cons + 0.10 QA$ |
 | **Kaggle Score (Test Ciego)**| **0.6615** | **0.6763** | **0.6800** | **$+0.0185$** | **Rendimiento oficial en Leaderboard** |
+
+*\*Nota de calibración intermedia (V3 preliminar, Sección 12.1 del notebook previo al ajuste fino de `conf_large = 0.15`):* Box F1: **0.6641**, Mask F1: **0.6273**, Exactitud QA Determinista: **0.7895**, Exactitud QA LLM: **0.5263**, Score Proxy Local: **0.7010**. La calibración adaptativa final consolidó Box F1 en **0.6722**, Mask F1 en **0.6351**, Exactitud QA LLM en **0.5526** y el Score Proxy Local en **0.7083**.
 
 Como se observa nítidamente en la curva de balance de la **Figura 5**, la formulación del F1-Score como media armónica penaliza enérgicamente las configuraciones desbalanceadas:
 
