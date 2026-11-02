@@ -476,16 +476,16 @@ A lo largo de semanas de desarrollo iterativo, medimos el rendimiento del sistem
  Calidad de Siluetas (Mask F1) 0,6132              0,6200              0,6351              +2,19 puntos
  Exactitud en Preguntas (QA)   60,53%              60,53%              78,95%              +18,42% ¡SALTO!
  Comprensión de Descripciones  0,00%               0,00%               100,0%              +100% PERFECTO
- Puntuación en Kaggle (Test)   0,6615              0,6763              0,6800              Líder de Tabla
+ Puntuación en Kaggle (Test)   0,6615              0,6763              0,6926              +0,0311 ¡RÉCORD!
 --------------------------------------------------------------------------------------------------------
- Tiempo por Foto (Latencia)    1,25 segundos       1,25 segundos       3,25 segundos       Compromiso justo
+ Tiempo por Foto (Latencia)    1,26 segundos       1,26 segundos       2,87 segundos       Compromiso justo
 ========================================================================================================
 ```
 
 ```
 Evolución de la Exactitud en Preguntas y Respuestas (VQA):
 100% ───────────────────────────────────────────────────────────── 100% (Descripciones V3)
- 80% ────────────────────────────────────────────── 78.95% (QA Global V3)
+ 80% ────────────────────────────────────────────── 78.95% (QA Determinista V3)
  60% ─── 60.53% (Línea Base V1) ── 60.53% (V2)
  40%
  20%
@@ -493,9 +493,9 @@ Evolución de la Exactitud en Preguntas y Respuestas (VQA):
 ```
 
 #### ¿Qué Significan Estos Números en la Práctica?
-- **El Salto de Preguntas (+18,4%):** En la versión inicial, el sistema acertaba apenas 6 de cada 10 preguntas sobre la escena y fallaba rotundamente al intentar describir la imagen. En la versión final, responde con certeza casi 8 de cada 10 preguntas y logra una **comprensión perfecta (100%)** al interpretar pedidos de descripción en lenguaje natural.
-- **Puntuación en Kaggle de 0,6800:** Este puntaje sitúa al sistema en la élite de la competencia académica, demostrando que la solución no solo funciona en el laboratorio, sino que generaliza con solidez sobre imágenes desconocidas que el modelo jamás había visto.
-- **El Costo Asumido (3,25 segundos):** Pasar de 1,25 a 3,25 segundos por imagen es un incremento del 2,6× en tiempo de procesamiento. En aplicaciones como el control de calidad fabril o el archivo documental, demorar 3 segundos en lugar de 1 segundo es absolutamente irrelevante cuando la recompensa es erradicar los errores visuales y las alucinaciones.
+- **El Salto de Preguntas (+18,4%):** En la versión inicial, el sistema acertaba apenas 6 de cada 10 preguntas sobre la escena y fallaba rotundamente al intentar describir la imagen. En la versión final, responde con certeza casi 8 de cada 10 preguntas y logra una **comprensión perfecta (100%)** al interpretar pedidos de descripción en lenguaje natural (20 de 20 consignas validadas).
+- **Puntuación en Kaggle de 0,6926:** Este puntaje oficial alcanzado en el conjunto de prueba (`submission.csv`, 80 imágenes) sitúa al sistema en el escalón más alto de la competencia académica, demostrando que la solución no solo funciona en el laboratorio, sino que generaliza con solidez sobre imágenes desconocidas que el modelo jamás había visto.
+- **El Costo Asumido (2,87 segundos):** Procesar cada imagen en apenas 2,87 segundos permite resolver el conjunto completo de 80 imágenes de prueba en menos de 4 minutos sobre una GPU estándar, garantizando una respuesta ágil mientras se erradican los errores visuales y las alucinaciones.
 
 ---
 
@@ -588,5 +588,6 @@ El proyecto desarrollado para el TPI de Inteligencia Artificial Primavera 2026 d
 Al combinar la versatilidad de los detectores de vocabulario abierto, la fineza milimétrica de los modelos de segmentación fundacional, la cartografía topológica estructurada y el razonamiento determinista libre de alucinaciones, logramos un sistema que no solo compite con éxito en los rankings cuantitativos, sino que ofrece aquello que la sociedad y la industria le exigen a la tecnología del mañana: **confianza, explicabilidad y rigor científico.**
 
 ---
-*Documento elaborado por el Grupo 21 — Cátedra de Inteligencia Artificial — UTN FRC (Primavera 2026)*  
-*Código de desarrollo y experimentos certificados en `tpi-ia-2026p-21.ipynb`.*
+*Documento explicativo conceptual elaborado por el Grupo 21 — Cátedra de Inteligencia Artificial — UTN FRC (Primavera 2026)*  
+*Docentes evaluadores: Ing. García, Mario Alejandro | Ing. Guzman, Analía | Ing. Gramatica, Martin*  
+*Informe técnico oficial: `INFORME_TPI_IA_2026P_21.md` | Inferencia y submission: `submission.csv` (Score: 0,6926) | Código: `tpi-ia-2026p-21.ipynb`.*

@@ -1,174 +1,189 @@
 # Guía Táctica Maestra para la Defensa Oral del TPI: Comprensión Visual de Escenas
 **Trabajo Práctico Integrador — Primavera 2026**  
 **Cátedra de Inteligencia Artificial — Universidad Tecnológica Nacional (UTN)**  
-**Facultad Regional Córdoba / Facultad Regional Buenos Aires**  
-**Curso:** 5k2 | **Grupo:** 21  
+**Facultad Regional Córdoba — Departamento de Ingeniería en Sistemas de Información**  
+**Curso:** 5K2 | **Grupo:** 21  
 
 ---
 
 ### Nómina Oficial del Equipo (Grupo 21)
+- **Chaile, Emmanuel Ricardo** — Legajo: 89767
+- **López Quinteros, Manuel** — Legajo: 99026
 - **Ocampo, Gabriel** — Legajo: 93368
 - **Pecchio, Valentina** — Legajo: 94416
-- **Lopez Quinteros, Manuel** — Legajo: 99026
-- **Chaile, Emmanuel Ricardo** — Legajo: 89767
 - **Perez, Alvaro** — Legajo: 97986
+
+### Cuerpo Docente Evaluador
+- **Ing. García, Mario Alejandro**
+- **Ing. Guzman, Analía**
+- **Ing. Gramatica, Martin**
+
+### Documentos de Referencia Oficial
+- **Informe Técnico Final:** [`INFORME_TPI_IA_2026P_21.md`](file:///c:/Users/perez/OneDrive/Documents/Ing.Sist-NUBE/IA/TPI%20IA%202026/INFORME_TPI_IA_2026P_21.md)
+- **Notebook de Desarrollo e Inferencia:** [`tpi-ia-2026p-21.ipynb`](file:///c:/Users/perez/OneDrive/Documents/Ing.Sist-NUBE/IA/TPI%20IA%202026/tpi-ia-2026p-21.ipynb)
+- **Predicciones del Conjunto de Test Oficial:** [`submission.csv`](file:///c:/Users/perez/OneDrive/Documents/Ing.Sist-NUBE/IA/TPI%20IA%202026/submission.csv) (80 imágenes con SceneJSON serializado, Score Kaggle Oficial: **0,6926**)
+- **Marco Teórico de la Cátedra:** [`IA-Resumen-Completo.pdf`](file:///c:/Users/perez/OneDrive/Documents/Ing.Sist-NUBE/IA/TPI%20IA%202026/IA-Resumen-Completo.pdf)
+- **Consignas y Alcances:** [`TPI Primavera 2026 - Comprensión visual de escenas.pdf`](file:///c:/Users/perez/OneDrive/Documents/Ing.Sist-NUBE/IA/TPI%20IA%202026/TPI%20Primavera%202026%20-%20Comprensi%C3%B3n%20visual%20de%20escenas.pdf)
 
 ---
 
 ## 1. Estrategia Táctica de Defensa y Cronograma Estricto de 10 Minutos
 
-El tribunal docente evaluará con cronómetro en mano: el tiempo máximo de exposición es de **exactamente 10 minutos**, seguido de una ronda de preguntas individuales y eventual testeo en vivo con imágenes no vistas. Exceder los 10 minutos conlleva penalización directa en la rúbrica de síntesis técnica.
-
-### 1.1. Desglose Minuto a Minuto con Mensajes Clave
+El tribunal docente evaluará con cronómetro estricto: el tiempo máximo de exposición grupal es de **exactamente 10 minutos**, seguido de una ronda de preguntas individuales y eventual testeo en vivo con imágenes no vistas. Exceder los 10 minutos conlleva penalización directa en la rúbrica de capacidad de síntesis técnica.
 
 ```
-+--------------------------------------------------------------------------------------------------+
-| CRONOGRAMA MAESTRO DE DEFENSA (10 MINUTOS ESTRICTOS)                                             |
-+--------+---------------+-------------------------------------+-----------------------------------+
-| MINUTO | BLOQUE        | ORADOR RESPONSABLE                  | MENSAJE FUERZA / OBJETIVO         |
-+--------+---------------+-------------------------------------+-----------------------------------+
-| 00-02  | Contexto,     | Gabriel Ocampo                      | Demostrar dominio del problema:   |
-|        | Problema y    | (Legajo 93368)                      | 71% de objetos pequeños (<1% área)|
-|        | EDA           |                                     | y política federada LVIS.         |
-+--------+---------------+-------------------------------------+-----------------------------------+
-| 02-05  | Arquitectura  | Valentina Pecchio (Leg. 94416)      | Defender la pipeline modular      |
-|        | de Pipeline y | Manuel Lopez Quinteros (Leg. 99026) | neuro-simbólica (OWLv2 + SAM2 +   |
-|        | Metodología   |                                     | SceneJSON 3x3) vs VLMs opacos.    |
-+--------+---------------+-------------------------------------+-----------------------------------+
-| 05-08  | Experimentos, | Emmanuel Ricardo Chaile             | Presentar el salto métrico V1->V3 |
-|        | Mosaicos y    | (Legajo 89767)                      | (F1 Box 0.6722, Kaggle 0.6800) y  |
-|        | Resultados    |                                     | refutación de hipótesis fallidas. |
-+--------+---------------+-------------------------------------+-----------------------------------+
-| 08-10  | VQA, Análisis | Alvaro Perez                        | Explicar desacoplamiento VQA,     |
-|        | de Errores y  | (Legajo 97986)                      | casos borde (semáforos/estatuas)  |
-|        | Conclusiones  |                                     | y cerrar con rigor de ingeniería. |
-+--------+---------------+-------------------------------------+-----------------------------------+
++---------------------------------------------------------------------------------------------------------+
+| CRONOGRAMA MAESTRO DE DEFENSA (10 MINUTOS ESTRICTOS)                                                    |
++--------+---------------+-------------------------------------+------------------------------------------+
+| MINUTO | BLOQUE        | ORADOR RESPONSABLE                  | MENSAJE FUERZA / OBJETIVO                |
++--------+---------------+-------------------------------------+------------------------------------------+
+| 00-02  | Contexto,     | Gabriel Ocampo                      | Dominio del problema: 71,06% objetos     |
+|        | Problema y    | (Legajo 93368)                      | pequeños (<1% área) y política federada  |
+|        | EDA           |                                     | LVIS (anotación no exhaustiva).          |
++--------+---------------+-------------------------------------+------------------------------------------+
+| 02-05  | Arquitectura  | Valentina Pecchio (Leg. 94416)      | Arquitectura modular neuro-simbólica:    |
+|        | de Pipeline y | Manuel López Quinteros (Leg. 99026) | OWLv2 base + SAM2 small + SceneJSON      |
+|        | Metodología   |                                     | 3x3 RLE Fortran vs VLMs opacos.          |
++--------+---------------+-------------------------------------+------------------------------------------+
+| 05-08  | Experimentos, | Emmanuel Ricardo Chaile             | Salto métrico V1->V3 (F1 Box 0,6722,     |
+|        | Mosaicos y    | (Legajo 89767)                      | Kaggle Oficial 0,6926, ganancia +0,0311) |
+|        | Resultados    |                                     | y refutación empírica de hipótesis.      |
++--------+---------------+-------------------------------------+------------------------------------------+
+| 08-10  | VQA, Análisis | Alvaro Perez                        | Desacoplamiento VQA (Qwen + motor        |
+|        | de Errores y  | (Legajo 97986)                      | determinista), política de ausencia,     |
+|        | Conclusiones  |                                     | casos borde y submission.csv oficial.    |
++--------+---------------+-------------------------------------+------------------------------------------+
 ```
 
 ---
 
-### 1.2. Matriz de Roles y Asignación de Ponencias
+### 1.1. Matriz de Roles y Asignación de Ponencias
 
 #### Miembro 1: Gabriel Ocampo (Legajo 93368) — Apertura, Problema y EDA (Minutos 0:00 - 2:00)
-- **Objetivo:** Captar inmediatamente la atención del tribunal, plantear los objetivos de la cátedra y justificar por qué las particularidades del dataset condicionaron toda la ingeniería posterior.
+- **Objetivo:** Captar inmediatamente la atención del tribunal, plantear los objetivos pedagógicos y justificar por qué las particularidades estadísticas del dataset condicionaron toda la ingeniería posterior.
 - **Puntos clave de intervención:**
-  1. *Planteo formal:* Construcción de un pipeline modular auditable para transformar imágenes RGB en un grafo de escena computable (`SceneJSON`) y responder consultas visuales (VQA) deterministas y mediante LLM.
-  2. *Hallazgo crítico del EDA:* El dataset de desarrollo (120 imágenes, 1.790 instancias, 120 categorías) presenta un **desbalance geométrico extremo**: el **71,06% son objetos pequeños (`small`, 1.272 instancias)** con área relativa $< 1\%$ de la escena (mediana: $0,61\%$), el **24,02% son objetos medianos (`medium`, 430 instancias)** entre 1% y 10%, y el **4,92% son objetos grandes (`large`, 88 instancias)** con $\ge 10\%$ del área total.
-  3. *Complejidad visual:* Promedio de 14,92 objetos/imagen con picos que superan los 40 y 60 objetos en escenas hacinadas.
-  4. *La trampa de LVIS:* Explicar por qué LVIS requiere una **política de evaluación federada**: al no haber anotación exhaustiva, predecir una clase no verificada no se penaliza como Falso Positivo para no castigar al modelo por descubrir instancias omitidas por los anotadores humanos.
-- **Frase de transición:** *"Para resolver este desafío perceptivo sin caer en cajas negras multimodales, Valentina y Manuel explicarán la arquitectura modular de 5 estadios que implementamos."*
+  1. *Planteo formal:* Construcción de un pipeline modular auditable para transformar imágenes complejas del mundo real en un grafo estructurado observable (`SceneJSON`) y responder consultas visuales (VQA) deterministas y asistidas por LLM.
+  2. *Hallazgo crítico del EDA (Sección 1 de `INFORME_TPI_IA_2026P_21.md`):* El dataset de desarrollo (120 imágenes, 1.790 instancias, 120 categorías) presenta un **desbalance geométrico extremo**:
+     - **71,06% de las instancias son objetos pequeños (`small`, 1.272 instancias)** con área relativa $< 1\%$ de la escena (mediana: $0,61\%$).
+     - **24,02% son objetos medianos (`medium`, 430 instancias)** con área entre $1\%$ y $10\%$.
+     - **4,92% son objetos grandes (`large`, 88 instancias)** con área $\ge 10\%$.
+  3. *Complejidad de escena:* Promedio de 14,92 objetos por imagen con picos de 40 y 60 objetos en escenas hacinadas.
+  4. *La clave de LVIS:* Explicar la **política de evaluación federada**: en un vocabulario amplio de 120 clases, la ausencia de anotación no equivale a ausencia física. Se modelan 4 estados (positivas anotadas, negativas verificadas `neg_category_ids` [118 en 74 imágenes], no exhaustivas `not_exhaustive_category_ids` [47 declaraciones] y no verificadas). Evaluar con LVIS previene penalizar al modelo como falso positivo por detectar objetos legítimos omitidos por anotadores humanos.
+- **Frase conectora de transición:** *"Para resolver este desafío perceptivo sin caer en cajas negras multimodales, Valentina y Manuel explicarán la arquitectura modular que implementamos."*
 
 #### Miembro 2: Valentina Pecchio (Legajo 94416) — Percepción y Segmentación (Minutos 2:00 - 3:30)
-- **Objetivo:** Explicar con precisión técnica cómo opera la etapa visual profunda y por qué se seleccionaron los modelos fundacionales adoptados.
+- **Objetivo:** Explicar con precisión técnica cómo opera la etapa visual profunda y justificar teóricamente la elección de los modelos fundacionales.
 - **Puntos clave de intervención:**
-  1. *Percepción Open-Vocabulary (OWLv2 ViT-B/16):* Empleamos `google/owlv2-base-patch16-ensemble` ($960 \times 960$ px). Opera mediante proyección multimodal contrastiva (estilo CLIP) alineando los parches visuales con consultas de texto `"a photo of a {category}"` para las 120 clases sin reentrenamiento supervisado.
-  2. *Segmentación Guiada por Prompts (SAM2):* Usamos Meta SAM2 (`sam2_hiera_small.pt`). Las bounding boxes de OWLv2 actúan como prompts espaciales. La extracción de características visuales se computa una única vez por imagen (`set_image`), decodificando las máscaras binarias de cada instancia en milisegundos.
+  1. *Percepción Open-Vocabulary (Sección 2.2):* Empleamos `google/owlv2-base-patch16-ensemble` ($960 \times 960$ px). Opera mediante proyección multimodal contrastiva (estilo CLIP) alineando los parches visuales con consultas de texto `"a photo of a {category}"` para las 120 clases sin reentrenamiento supervisado ni fine-tuning, evitando sobreajuste en el dataset acotado.
+  2. *Segmentación Guiada por Prompts (Sección 2.4):* Empleamos Meta SAM2 (`sam2_hiera_small.pt`). Las bounding boxes de OWLv2 actúan como prompts espaciales. La extracción de características visuales se computa una única vez por imagen (`set_image`), decodificando las máscaras binarias de cada instancia en $\approx 10$ milisegundos mediante mecanismos de atención cruzada.
   3. *Modo de máscara:* Demostrar por qué operamos con `multimask_output = False` (retornando la hipótesis de mayor score), evitando la sobre-segmentación de partes en objetos pequeños.
-- **Frase de transición:** *"Una vez que obtenemos cajas y máscaras pixel-perfect, Manuel detallará cómo serializamos esta geometría en un grafo interpretable."*
+- **Frase conectora de transición:** *"Una vez obtenidas cajas y máscaras pixel-exactas, Manuel detallará cómo serializamos esta geometría en un grafo computable."*
 
-#### Miembro 3: Manuel Lopez Quinteros (Legajo 99026) — Representación Estructurada y Trazabilidad (Minutos 3:30 - 5:00)
-- **Objetivo:** Demostrar el cumplimiento de la consigna central de la cátedra: la representación intermedia simbólica observable y su validación formal.
+#### Miembro 3: Manuel López Quinteros (Legajo 99026) — Representación Estructurada y Trazabilidad (Minutos 3:30 - 5:00)
+- **Objetivo:** Demostrar el cumplimiento de la consigna central: la representación intermedia simbólica observable y su validación formal.
 - **Puntos clave de intervención:**
-  1. *Esquema `SceneJSON`:* Estructura formal serializada que incluye metadatos de imagen, lista de objetos tipificados y grafo de relaciones topológicas.
+  1. *Esquema `SceneJSON` (Sección 2.5):* Estructura formal serializada que incluye metadatos de imagen, lista de objetos tipificados (caja, máscara, área, centroide, posición, escala, color dominante en paleta de 11 colores) y grafo de relaciones topológicas.
   2. *Cuantización espacial 3x3:* Cálculo del centroide de masa $(\bar{x}, \bar{y})$ a partir de la máscara binaria proyectado a una cuadrícula ortogonal de 9 sectores (`top_left` a `bottom_right`). Si la máscara es anómala, fallback seguro al centro geométrico del bounding box.
-  3. *Compresión RLE Fortran-order:* Serialización de máscaras mediante Run-Length Encoding en orden de columnas (`order="F"`), cumpliendo con la especificación de COCO/LVIS y reduciendo el consumo de memoria en un 95% respecto a tensores binarios densos.
-  4. *Relaciones Topológicas Deterministas:* Evaluación de pares de objetos mediante predicados booleanos (`left_of`, `right_of`, `above`, `below`, `overlaps`, `inside`) con margen de tolerancia del 5%.
-  5. *Módulo de Auditoría (`PipelineTracer`):* Context manager que cronometra cada fase, registra fallas sin abortar el lote y valida sintaxis mediante `jsonschema.Draft7Validator` (100% de consistencia lograda en las 120 imágenes).
-- **Frase de transición:** *"Con este pipeline base funcional, Emmanuel presentará cómo optimizamos los hiperparámetros y qué experimentos científicos confirmaron nuestra solución final."*
+  3. *Compresión RLE Fortran-order:* Serialización de máscaras mediante Run-Length Encoding en orden de columnas (`order="F"`), cumpliendo con la especificación de COCO/LVIS (`pycocotools`) y reduciendo el consumo de memoria en un 95% respecto a matrices densas.
+  4. *Relaciones Topológicas Deterministas:* Evaluación de pares de objetos mediante predicados booleanos (`left_of`, `right_of`, `above`, `below`, `overlaps`, `inside`) con margen de tolerancia del 5% para evitar inestabilidad en bordes.
+  5. *Módulo de Auditoría (`PipelineTracer`, Sección 2.6):* Context manager que cronometra cada fase, registra fallas sin abortar el lote y valida sintaxis mediante `jsonschema.Draft7Validator` (100% de consistencia lograda en las 120 imágenes de desarrollo y en las 80 imágenes de test).
+- **Frase conectora de transición:** *"Con este pipeline funcional, Emmanuel presentará la optimización experimental que catapultó nuestro score."*
 
 #### Miembro 4: Emmanuel Ricardo Chaile (Legajo 89767) — Experimentación, Mosaicos y Resultados (Minutos 5:00 - 8:00)
 - **Objetivo:** Exponer la progresión empírica de resultados (V1 $\to$ V2 $\to$ V3), la justificación física de los mosaicos y la refutación honesta de hipótesis nulas.
 - **Puntos clave de intervención:**
-  1. *Salto de la Línea Base (V1):* Confianza 0,15, NMS 0,30 $\implies$ $F1_{box} = 0,6464$, $F1_{mask} = 0,6132$, Score Kaggle = **0,6615**.
-  2. *Optimización Bidimensional (V2):* Barrido sistemático de umbrales en 120 imágenes. Se identificó el óptimo en `conf = 0.17`, `nms = 0.35`, elevando el score de Kaggle a **0,6763**.
-  3. *La Gran Innovación V3 — Mosaicos Multiescala $2 \times 2$ con 25% de Overlap:* Para rescatar el 71% de objetos pequeños invisibles a la grilla de parches de $16 \times 16$ px de ViT, subdividimos la imagen en 4 ventanas de $\approx 366 \times 275$ px, reescaladas cada una a $960 \times 960$ px. Esto introduce un **zoom digital óptico efectivo de $1,75\times$**.
-  4. *Filtrado de mosaicos:* Descarte de cajas a $<4\text{ px}$ de bordes internos (objetos truncados) y de cajas con área $>10\%$ del total (delegadas a la imagen global), seguido de NMS global unificado.
-  5. *Umbrales adaptativos:* Umbral permisivo de 0,15 para objetos grandes ($\ge 5\%$ del área) y 0,23 para el resto.
-  6. *Resultados Ganadores V3:* $F1_{box} = \mathbf{0,6722}$, $F1_{mask} = \mathbf{0,6351}$, **Kaggle Oficial = 0,6800**.
-  7. *Experimentos Negativos Clave:*
-     - `pad_fix`: $\Delta = 0,0000$ (Hugging Face ya compensaba el padding internamente).
-     - OWLv2 Large: Rechazado; $F1_{box}$ cayó a $0,626$ por proliferación de falsos positivos y latencia $4,7\times$ mayor ($11,45\text{ s}$ vs $2,44\text{ s}$).
-     - SAM2 Multimask: Rechazado; $F1_{mask}$ cayó a $0,590$ por fragmentación de objetos pequeños.
-- **Frase de transición:** *"Para completar el sistema, Alvaro explicará la arquitectura neuro-simbólica del módulo VQA, el análisis de errores y las conclusiones finales."*
+  1. *Progresión de Versiones (Sección 4.1 de `INFORME_TPI_IA_2026P_21.md`):*
+     - **V1 (Línea Base):** OWLv2 base, conf 0,15, NMS 0,30 $\implies$ $F1_{box} = 0,6464$, $F1_{mask} = 0,6132$, Score Kaggle = **0,6615**.
+     - **V2 (Ajuste de Umbrales):** Barrido conjunto de confianza (0,12 a 0,50) y NMS (0,25 a 0,50). Óptimo en conf 0,17 y NMS 0,35 $\implies$ Score percepción 0,4787 (+0,0057), Score Kaggle = **0,6763**.
+     - **V3 (Multiescala + Umbral Adaptativo + VQA):** Mosaicos 2x2 + umbral 0,23 / NMS 0,30 + umbral adaptativo 0,15 para cajas globales $\ge 5\%$ del área $\implies$ $F1_{box} = \mathbf{0,6722}$, $F1_{mask} = \mathbf{0,6351}$, **Score Kaggle Oficial = 0,6926** (ganancia total de **+0,0311**).
+  2. *Innovación de Mosaicos 2x2 con 25% de Overlap (Sección 4.3):* Subdivide la imagen en 4 ventanas solapadas reescaladas a $960 \times 960$ px, otorgando un **aumento óptico de resolución efectiva de $1,75\times$** ($3,06\times$ en área) para rescatar objetos pequeños.
+  3. *Filtrado de recortes:* Descarte de cajas a $<4\text{ px}$ de bordes internos (objetos truncados) y de cajas con área $>10\%$ (delegadas a la imagen global), seguido de NMS global unificado.
+  4. *Umbral adaptativo para cajas grandes (Sección 4.4):* Subió el score de percepción de 0,4852 a **0,4912**, devolviendo el recall de objetos grandes de 0,693 a **0,852** sin perder precisión en objetos pequeños.
+  5. *Experimentos Negativos Clave (Sección 6.2):*
+     - **H1 (OWLv2 Large patch 14):** Rechazado; F1 de cajas cayó a 0,626 (vs 0,651) y latencia se multiplicó por $4,7\times$ (11,45 s vs 2,44 s) por explosión de falsos positivos en el fondo.
+     - **SAM 2 Multimask:** Rechazado; F1 de máscaras cayó de 0,627 a 0,590 por sobre-segmentación en subpartes.
+     - **NMS entre clases:** Rechazado; bajó F1 de cajas de 0,6722 a 0,6708 al suprimir objetos superpuestos legítimos (ropa sobre personas, tazas sobre mesas).
+     - **SAM 2.1:** Score idéntico (0,4911 vs 0,4912); se mantuvo SAM 2 por estabilidad.
+     - **pad_fix:** Mejora $\Delta = 0,0000$ (Hugging Face ya compensaba el padding internamente).
+- **Frase conectora de transición:** *"Para cerrar, Alvaro detallará la arquitectura neuro-simbólica de VQA, los casos de error y los resultados de la submission oficial."*
 
 #### Miembro 5: Alvaro Perez (Legajo 97986) — Razonamiento VQA, Errores y Conclusiones (Minutos 8:00 - 10:00)
-- **Objetivo:** Mostrar cómo el LLM razona sin alucinar, analizar los casos de falla cualitativos y cerrar la defensa con solidez técnica.
+- **Objetivo:** Mostrar cómo el LLM razona sin alucinar, analizar los casos de falla cualitativos, detallar el archivo de submission y cerrar la defensa con solidez de ingeniería.
 - **Puntos clave de intervención:**
-  1. *Arquitectura VQA de Tres Capas Desacopladas:*
-     - *Capa 1 (Intérprete):* `Qwen2.5-1.5B-Instruct` traduce lenguaje natural a un JSON intermedio formal (`QUERY_SPEC`). Implementamos un bucle de reintento (`interpret_with_retry`) con sugerencias semánticas mediante similitud coseno de embeddings OWLv2, logrando 100% de interpretación en descripciones y 90% en existencia.
-     - *Capa 2 (Motor Determinista):* Ejecución directa sobre `SceneJSON`. Aplica la **política de ausencia derivada (`not_detected`)** para responder explícitamente `"no"` o `0` con nota de auditoría en lugar de colapsar con `insufficient_information`. Exactitud determinista saltó de **0,6053 a 0,7895 (+18,4%)**.
-     - *Capa 3 (Verbalizador y Filtro de Fidelidad):* Si el LLM altera números o entidades del motor, el filtro `is_faithful` revierte inmediatamente a la plantilla determinista rígida (84,9% de verbalizaciones aprobadas).
-  2. *Análisis de Errores Reales:*
-     - Confusión simétrica entre `traffic light` (26 FP) y `streetlight` (21 FP) por similitud estructural urbana.
-     - Detección de textura sin contexto de materialidad en `tpi_0085.jpg` (estatua de perro clasificada como animal vivo y relieve en piedra clasificado como elefante).
-     - Falsos negativos severos en objetos alargados (`strap`: 17,4% recall) y ocluidos (`book`: 19,6% recall).
-  3. *Cierre Conclusivo:* Demostramos que la arquitectura modular neuro-simbólica supera a los modelos monolíticos opacos, entregando un sistema verificable, con cero fugas de datos y un desempeño superior validado en el Leaderboard oficial.
-- **Frase final de cierre:** *"Quedamos a disposición de los profesores para la sesión de preguntas técnicas y demostración en vivo."*
+  1. *Arquitectura VQA de Tres Capas Desacopladas (Sección 3 de `INFORME_TPI_IA_2026P_21.md`):*
+     - *Capa 1 (Intérprete):* `Qwen2.5-1.5B-Instruct` traduce la pregunta a un JSON formal (`QUERY_SPEC`). No tiene acceso a la imagen ni a los datos de la escena, anulando alucinaciones fácticas. Incorpora bucle de reintento con candidatos semánticos por similitud coseno (`interpret_with_retry`).
+     - *Capa 2 (Motor Determinista):* Consulta lógica sobre el `SceneJSON`. Aplica la **política de ausencia derivada (`not_detected`)** para responder explícitamente `"no"` o `0` con nota de auditoría en lugar de colapsar con `insufficient_information`.
+     - *Capa 3 (Verbalizador y Filtro de Fidelidad):* Filtro algorítmico determinista (`is_faithful`) que verifica que el texto del LLM coincida exactamente con los números y entidades del motor (71,4% de verbalizaciones aprobadas; el resto usa plantilla determinista).
+  2. *Exactitud VQA:* Sobre 38 preguntas cerradas evaluables (excluyendo 2 de clases no exhaustivas):
+     - **Modo Determinista:** Saltó de 0,6053 (23/38) a **0,7895 (30/38)** ($+18,4\%$).
+     - **Modo LLM:** Saltó de 0,4211 (16/38) a **0,5789 (22/38)** ($+15,8\%$).
+     - **Descripciones:** **20 / 20** superaron la validación con estructura lingüística uniforme.
+  3. *Archivo Oficial de Submission (`submission.csv`):* 80 imágenes de prueba procesadas con la pipeline V3 completa (`image_id,SceneJSON`), validado en Kaggle con el score final de **0,6926**. Tiempo de inferencia: **2,87 s/img** ($\approx 3,8$ minutos en total).
+  4. *Modos de Falla y Límites del Sistema (Sección 6.3):*
+     - Confusiones simétricas en postes urbanos: `traffic light` (26 FP) vs `streetlight` (21 FP).
+     - Ceguera de materialidad: estatua de piedra detectada como `dog` y bajo relieve en piedra clasificado como `elephant` (conf 0,4086 en `tpi_0085.jpg`).
+     - Omisiones en estructuras filiformes (`strap`: recall 0,174) y libros apilados (`book`: recall 0,196).
+  5. *Cierre Conclusivo:* La arquitectura neuro-simbólica desacoplada demostró ser netamente superior a las cajas negras monolíticas: garantiza 100% de auditoría, cero alucinación de coordenadas y exactitud competitiva verificada en el Leaderboard.
+- **Frase final de cierre:** *"Quedamos a entera disposición de los profesores Mario García, Analía Guzman y Martin Gramatica para la sesión de preguntas técnicas y demostración en vivo."*
+
+---
+
+### 1.2. Key Metrics Cheat-Sheet (Tabla Resumen de Bolsillo)
+
+Llevar estos números exactos memorizados al examen (fuente: Tablas de las Secciones 4 y 5 de `INFORME_TPI_IA_2026P_21.md`):
+
+| Dimensión / Métrica Evaluada | Versión V1 (Línea Base) | Versión V2 (Ajuste Umbrales) | Versión V3 (Final de Entrega) | $\Delta$ Total (V3 vs V1) | Meta de Cátedra / Rúbrica |
+|---|:---:|:---:|:---:|:---:|:---:|
+| **Score Oficial Kaggle (Test Ciego)** | **0,6615** | **0,6763** | **0,6926** | **+0,0311** | **Máximo rendimiento del grupo** |
+| **F1 de Cajas (LVIS, IoU $\ge 0,50$)** | 0,6464 | 0,6520 | **0,6722** | **+0,0258** | $\ge 0,50$ (Supera holgadamente Promoción) |
+| **Precisión de Cajas** | 0,6591 | 0,7060 | **0,7159** | $+0,0568$ (+8,6%) | Supresión masiva de falsos positivos |
+| **Recall de Cajas** | 0,6341 | 0,6030 | **0,6335** | $-0,0006$ (-0,1%) | Recall preservado mediante mosaicos 2x2 |
+| **Cobertura de Cajas** | 0,3959 | 0,4012 | **0,4249** | $+0,0290$ | Mayor fracción de predicciones evaluables |
+| **F1 de Máscaras (Pixel IoU $\ge 0,50$)** | 0,6132 | 0,6200 | **0,6351** | **+0,0219** | Segmentación precisa con SAM2 |
+| **Precisión de Máscaras** | 0,6270 | 0,6680 | **0,6840** | $+0,0570$ (+9,1%) | Máscaras ajustadas al contorno real |
+| **Recall de Máscaras** | 0,6000 | 0,5790 | **0,5793** | $-0,0207$ | Filtro estricto en geometrías complejas |
+| **Consistencia `SceneJSON`** | 1,0000 (100%) | 1,0000 (100%) | **1,0000 (100%)** | $0,0000$ | 120/120 imágenes conformes a Schema |
+| **VQA Exactitud Determinista** | 0,6053 (23/38) | 0,6053 (23/38) | **0,7895 (30/38)** | **+0,1842** (+30,4%) | Impacto de política de ausencia derivada |
+| **VQA Exactitud LLM** | 0,4211 (16/38) | 0,4211 (16/38) | **0,5789 (22/38)** | **+0,1578** (+37,5%) | Impacto del bucle de reintento en JSON |
+| **VQA Descripciones Válidas** | 0,00% (0/20) | 0,00% (0/20) | **100,0% (20/20)** | **+100,0%** | Estructura formal sin alucinación |
+| **Filtro Fidelidad Verbalizador LLM** | 30,0% | 30,0% | **71,4%** | $+41,4\%$ | Fallback determinista en el 28,6% restante |
+| **Score Proxy Local** | 0,6745 | 0,6810 | **0,7096** | **+0,0351** | $0,40 F1_b + 0,35 F1_m + 0,15 Cons + 0,10 QA$ |
+| **Score de Percepción (Barridos)** | 0,4730 | 0,4787 | **0,4912** | $+0,0182$ | $0,40 F1_{box} + 0,35 F1_{mask}$ |
+| **Latencia Total End-to-End** | 1,26 s/img | 1,26 s/img | **2,87 s/img** | $+1,61\text{ s}$ ($2,3\times$) | 3,8 min para las 80 fotos de test |
+| **Desglose de Latencia V3** | Detección OWLv2: **2,22 s** (77,4%) \| SAM2: **0,39 s** (13,6%) \| SceneJSON: **0,19 s** (6,6%) \| Validación: **0,06 s** (2,1%) |
+
+#### Resumen Estadístico del Dataset (EDA de Bolsillo):
+- **Imágenes de Desarrollo:** 120 imágenes RGB (resolución típica $640 \times 480$ px).
+- **Total de Instancias Ground Truth:** **1.790 anotaciones** sobre 120 categorías (media: 14,92 obj/imagen; mediana: 12).
+- **Objetos Pequeños (`small`, área $< 1\%$):** **71,06% (1.272 instancias)** — Mediana de área relativa: 0,61%.
+- **Objetos Medianos (`medium`, área $1\% - 10\%$):** **24,02% (430 instancias)** — Recall V3: 0,777.
+- **Objetos Grandes (`large`, área $\ge 10\%$):** **4,92% (88 instancias)** — Recall V3: 0,852 (recuperado con umbral 0,15).
+- **Anotación Federada LVIS:** 118 declaraciones de ausencia (`neg_category_ids`) en 74 imágenes y 47 declaraciones no exhaustivas.
 
 ---
 
 ### 1.3. Protocolo de Transición y Cues Verbales
 
-Para proyectar máxima sincronización de equipo, los integrantes deben utilizar transiciones verbales directas y concisas. Nunca dudar de quién tiene la palabra.
-
 | Transición | Orador Saliente | Orador Entrante | Frase Conectora Mandatoria |
 |---|---|---|---|
 | **T1 (Min 2:00)** | Gabriel Ocampo | Valentina Pecchio | *"Valentina nos detallará cómo el modelo de percepción extrae las primitivas visuales de estas escenas complejas."* |
-| **T2 (Min 3:30)** | Valentina Pecchio | Manuel Lopez Quinteros | *"Manuel explicará cómo convertimos estas máscaras y cajas en la representación simbólica estructurada exigida."* |
-| **T3 (Min 5:00)** | Manuel Lopez Quinteros | Emmanuel Chaile | *"Emmanuel presentará la progresión experimental que llevamos a cabo y cómo los mosaicos multiescala elevaron nuestra métrica."* |
+| **T2 (Min 3:30)** | Valentina Pecchio | Manuel López Quinteros | *"Manuel explicará cómo convertimos estas máscaras y cajas en la representación simbólica estructurada exigida."* |
+| **T3 (Min 5:00)** | Manuel López Quinteros | Emmanuel Chaile | *"Emmanuel presentará la progresión experimental que llevamos a cabo y cómo los mosaicos multiescala elevaron nuestra métrica."* |
 | **T4 (Min 8:00)** | Emmanuel Chaile | Alvaro Perez | *"Alvaro finalizará con la arquitectura desacoplada del razonamiento VQA, los patrones de error y nuestras conclusiones."* |
 
 ---
 
-### 1.4. Protocolo de Contingencia ("Safety Fallback")
+### 1.4. Master Elevator Pitch (< 60 Segundos)
 
-Si un docente interrumpe con una pregunta durante los 10 minutos de exposición:
-1. **El orador que tiene la palabra en ese instante toma el control de la respuesta.** No mirarse entre compañeros esperando quién habla.
-2. Si la pregunta corresponde a la especialidad temática de otro miembro, el orador responde en una frase y cede cortésmente la palabra: *"Es un punto clave de la etapa de segmentación; Valentina puede precisar la matemática del decoder de SAM2"*.
-3. **Control del tiempo:** Si la interrupción docente consume más de 60 segundos, el equipo no debe acelerar atropelladamente el contenido restante; debe saltar directo a los resultados cuantitativos y conclusiones, manteniendo la calma.
-
----
-
-### 1.5. Master Elevator Pitch (< 60 Segundos)
-
-> *"Nuestro proyecto resuelve la comprensión visual de escenas complejas bajo una arquitectura neuro-simbólica modular de cinco estadios que desacopla la percepción profunda del razonamiento lógico, eliminando el sesgo de 'caja negra' de los VLMs end-to-end.  
-> Ante un dataset donde el 71% de los objetos son diminutos —ocupando menos del 1% de la escena— combinamos la detección de vocabulario abierto de OWLv2 con la segmentación guiada por prompts de SAM2, estructurando la geometría en un grafo `SceneJSON` con compresión RLE y discretización espacial 3x3.  
-> Mediante una innovación de mosaicos multiescala 2x2 con 25% de solape que otorga un aumento óptico de 1.75x, junto a un módulo VQA con autocorrección semántica y motor determinista infalible, elevamos el F1 de detección de 0.6464 a 0.6722, la exactitud de preguntas de 60.5% a 78.95%, y alcanzamos un score oficial de 0.6800 en el Leaderboard de Kaggle, todo con 100% de consistencia de esquema y trazabilidad auditable."*
-
----
-
-### 1.6. Key Metrics Cheat-Sheet (Tabla Resumen de Bolsillo)
-
-Llevar estos números memorizados al examen:
-
-| Dimensión / Métrica | Versión V1 (Línea Base) | Versión V2 (Tuning Umbrales) | Versión V3 (Multiescala + VQA Fina) | $\Delta$ Total (V3 vs V1) | Meta de Cátedra |
-|---|---|---|---|---|---|
-| **Box F1-Score** | 0,6464 | 0,6520 | **0,6722** | $+0,0258$ | $\ge 0,50$ (Promoción) |
-| **Box Precision** | 0,6591 | 0,7060 | **0,7159** | $+0,0568$ | — |
-| **Box Recall** | 0,6341 | 0,6030 | **0,6335** | $-0,0006$ | — |
-| **Mask F1-Score** | 0,6132 | 0,6200 | **0,6351** | $+0,0219$ | — |
-| **Mask Precision** | 0,6270 | — | **0,6840** | $+0,0570$ | — |
-| **Mask Recall** | 0,6000 | — | **0,5793** | $-0,0207$ | — |
-| **Consistencia SceneJSON** | 1,0000 (100%) | 1,0000 (100%) | **1,0000 (100%)** | $0,0000$ | 100% obligatorio |
-| **VQA Exactitud Determinista** | 0,6053 (23/38) | 0,6053 (23/38) | **0,7895 (30/38)** | $+0,1842$ (+18,4%) | — |
-| **VQA Exactitud LLM** | 0,4211 (16/38) | 0,4211 (16/38) | **0,5526 (21/38)** | $+0,1315$ (+13,2%) | — |
-| **PipelineScore Local** | 0,6745 | 0,6810 | **0,7083** | $+0,0338$ | — |
-| **Score Oficial Kaggle (Test)** | **0,6615** | **0,6763** | **0,6800** | $\mathbf{+0,0185}$ | Top Benchmark |
-| **Latencia Total End-to-End** | $\approx 1,25\text{ s/img}$ | $\approx 1,25\text{ s/img}$ | **$3,25\text{ s/img}$** | $+2,00\text{ s}$ ($2,6\times$) | Operable en GPU T4 |
-| **Desglose Latencia V3** | OWLv2: 2,44s (75%) \| SAM2: 0,43s (13%) \| SceneJSON: 0,28s (9%) \| Valid: 0,09s (3%) | — | — |
-
-#### Resumen Estadístico del Dataset (EDA Cheat-Sheet de Bolsillo):
-- **Total de Instancias Ground Truth:** **1.790 anotaciones** distribuidas en 120 imágenes de desarrollo (media: 14,92 obj/imagen).
-- **Objetos Pequeños (`small`, área $< 1\%$):** **71,06% (1.272 instancias)** — Mediana de área relativa: 0,61% (cuello de botella de resolución).
-- **Objetos Medianos (`medium`, área $1\% - 10\%$):** **24,02% (430 instancias)** — Recall sostenido en 0,765.
-- **Objetos Grandes (`large`, área $\ge 10\%$):** **4,92% (88 instancias)** — Salvaguarda adaptativa con `conf_large = 0.15`.
-- **Anotación Federada LVIS:** 118 declaraciones de ausencia (`neg_category_ids`) en 74 imágenes y 47 declaraciones no exhaustivas.
+> *"Nuestro proyecto resuelve la comprensión visual de escenas complejas mediante una arquitectura neuro-simbólica modular de cinco estadios que desacopla la percepción continua del razonamiento lógico, eliminando el sesgo de 'caja negra' de los modelos visión-lenguaje extremo a extremo.  
+> Ante un dataset donde el 71% de los objetos son diminutos —ocupando menos del 1% del encuadre— combinamos la detección de vocabulario abierto de OWLv2 con la segmentación guiada por prompts de SAM2, estructurando la geometría en un grafo `SceneJSON` con compresión RLE y discretización topológica 3x3.  
+> Mediante una innovación de mosaicos multiescala 2x2 con 25% de solape que otorga un aumento óptico efectivo de 1.75x, junto a un umbral adaptativo para cajas grandes y un motor VQA con política de ausencia derivada, elevamos el F1 de detección a 0.6722, la exactitud de preguntas deterministas a 78.95% y alcanzamos un score oficial de **0.6926** en el Leaderboard ciego de Kaggle (`submission.csv`), con 100% de consistencia de esquema y trazabilidad auditable."*
 
 ---
 
 ## 2. Banco Exhaustivo de Preguntas y Respuestas Técnicas (Q&A Bank)
 
-Organizado en 7 bloques temáticos rigurosos con formulación matemática y referencias al código del notebook `tpi-ia-2026p-21.ipynb` y al apunte `IA-Resumen-Completo.pdf`.
+Organizado en 7 bloques temáticos rigurosos con formulación matemática y referencias cruzadas directas a `INFORME_TPI_IA_2026P_21.md`, `tpi-ia-2026p-21.ipynb`, `submission.csv` y `IA-Resumen-Completo.pdf`.
 
 ---
 
@@ -177,26 +192,27 @@ Organizado en 7 bloques temáticos rigurosos con formulación matemática y refe
 #### Pregunta A.1: "¿Por qué fue necesario adoptar la política de evaluación federada de LVIS en lugar del cálculo convencional de mAP de COCO?"
 - **Respuesta Técnica Fundamentada:**  
   "En el benchmark de COCO clásico (80 clases), se asume una hipótesis de mundo cerrado con **anotación exhaustiva**: todo objeto visible de esas 80 clases ha sido anotado. Bajo esa premisa, cualquier detección generada por el modelo que no coincida con una anotación de ground truth es, por definición, un Falso Positivo ($FP$).  
-  Sin embargo, nuestro proyecto opera sobre un vocabulario de 120 categorías de LVIS en un dataset de mundo abierto. Anotar exhaustivamente 120 clases (muchas de ellas raras o de escala diminuta) en cada imagen es humanamente inviable. Por diseño del protocolo LVIS, **la ausencia de una anotación no implica la ausencia física del objeto en la imagen**.  
-  Si aplicáramos el mAP estándar de COCO, un detector de vocabulario abierto potente como OWLv2 detectaría correctamente objetos legítimos (como un tenedor o una botella en el fondo) que el anotador humano simplemente pasó por alto, y el evaluador lo penalizaría injustamente sumando un Falso Positivo. La política federada resuelve esto particionando las categorías por imagen en cuatro estados: positivas anotadas, negativas verificadas por un revisor (`neg_category_ids`), positivas no exhaustivas (`not_exhaustive_category_ids`), y categorías no verificadas."
+  Sin embargo, nuestro proyecto opera sobre un vocabulario de 120 categorías de LVIS en escenas complejas de interiores y exteriores. Anotar exhaustivamente 120 clases (muchas de ellas raras o diminutas) en cada imagen es inviable. Por diseño del protocolo LVIS, **la ausencia de una anotación no implica la ausencia física del objeto en la imagen**.  
+  Si aplicáramos el mAP estándar de COCO, un detector de vocabulario abierto potente como OWLv2 detectaría correctamente objetos legítimos (como un tenedor o una botella en el fondo) que el anotador humano simplemente pasó por alto, y el evaluador lo penalizaría injustamente sumando un Falso Positivo. La política federada de LVIS resuelve esto particionando las categorías por imagen en cuatro estados: positivas anotadas, negativas verificadas por un revisor (`neg_category_ids`), positivas no exhaustivas (`not_exhaustive_category_ids`), y categorías no verificadas."
 
 #### Pregunta A.2: "¿Cómo opera matemáticamente la penalización de predicciones y qué tratamiento reciben las categorías negativas y no exhaustivas?"
 - **Respuesta Técnica Fundamentada:**  
   "La formulación matemática de LVIS establece reglas disyuntivas para clasificar cada predicción $p_i$ generada por el detector:
-  1. **Categoría Positiva:** Existe en el conjunto de ground truth de la imagen ($c \in GT$). Si la predicción $p_i$ tiene una intersección sobre unión $\text{IoU} \ge 0,50$ con una instancia no asignada, computa como **Verdadero Positivo ($TP$)**. Las predicciones restantes de esa clase sin emparejamiento computan como **Falsos Positivos ($FP$)**, y las anotaciones GT no detectadas computan como **Falsos Negativos ($FN$)**.
-  2. **Categoría Negativa Verificada ($c \in \text{neg\_category\_ids}$):** Un revisor humano inspeccionó la escena y certificó que dicha clase no existe. Por lo tanto, **cualquier predicción de esa categoría computa directamente como Falso Positivo ($FP$)**, castigando las alucinaciones del modelo. En nuestro dataset hay 118 declaraciones negativas en 74 imágenes.
-  3. **Categoría No Exhaustiva ($c \in \text{not\_exhaustive\_category\_ids}$):** Se sabe que existen más instancias de las anotadas. Si la predicción coincide con un GT ($\text{IoU} \ge 0,50$), es $TP$; pero si no empareja, **se marca como Ignorada** (no suma $FP$). Hay 47 declaraciones de este tipo en el dataset.
+  1. **Categoría Positiva:** Existe en el ground truth de la imagen ($c \in GT$). Si la predicción $p_i$ tiene una intersección sobre unión $\text{IoU} \ge 0,50$ con una instancia no asignada, computa como **Verdadero Positivo ($TP$)**. Las predicciones restantes sin emparejamiento computan como **Falsos Positivos ($FP_{\text{pos}}$)**, y las anotaciones GT no detectadas computan como **Falsos Negativos ($FN$)**.
+  2. **Categoría Negativa Verificada ($c \in \text{neg\_category\_ids}$):** Un revisor humano certificó que la clase no existe en la foto. Por lo tanto, **cualquier predicción de esa categoría computa directamente como Falso Positivo ($FP_{\text{neg}}$)**, castigando las alucinaciones. En nuestro dataset hay 118 declaraciones negativas en 74 imágenes.
+  3. **Categoría No Exhaustiva ($c \in \text{not\_exhaustive\_category\_ids}$):** Se sabe que existen más instancias de las anotadas. Si la predicción coincide con un GT ($\text{IoU} \ge 0,50$), es $TP$; pero si no empareja, **se marca como Ignorada** (no suma $FP$). Hay 47 declaraciones de este tipo.
   4. **Categoría No Verificada:** No está anotada ni fue verificada como ausente. Cualquier predicción se marca como **Ignorada** (ni $TP$ ni $FP$).
   
-  Por ende, el Recall evalúa la exhaustividad sobre el GT verificado, mientras que la Precisión se calcula estrictamente sobre el subconjunto de predicciones evaluables:
-  $$\text{Recall} = \frac{TP}{TP + FN}, \qquad \text{Precisión} = \frac{TP}{TP + FP_{\text{verificados}}}"$$
+  Por ende, el Recall y la Precisión se definen estrictamente sobre el subconjunto evaluable:
+  $$\text{Recall}_{\text{LVIS}} = \frac{TP}{TP + FN}, \qquad \text{Precisión}_{\text{LVIS}} = \frac{TP}{TP + FP_{\text{pos}} + FP_{\text{neg}}}$$
+  $$F_1\text{-Score} = \frac{2 \cdot \text{Precisión} \cdot \text{Recall}}{\text{Precisión} + \text{Recall}}, \qquad \text{Cobertura} = \frac{TP + FP_{\text{pos}} + FP_{\text{neg}}}{TP + FP_{\text{pos}} + FP_{\text{neg}} + \text{Ignoradas}}"$$
 
-#### Pregunta A.3: "Si su precisión de cajas es de 0,7159 pero la cobertura de evaluación es del 39,59%, ¿qué significa exactamente esta cobertura y por qué no invalida el resultado?"
+#### Pregunta A.3: "Si la precisión de cajas de la V3 final es 0,7159 y la cobertura es 0,4249, ¿qué significa esta cobertura y por qué no invalida el resultado?"
 - **Respuesta Técnica Fundamentada:**  
-  "La cobertura de evaluación de LVIS cuantifica la fracción de predicciones generadas por el modelo que caen en categorías auditables (positivas o negativas verificadas):
-  $$\text{Cobertura} = \frac{TP + FP_{\text{verificados}}}{TP + FP_{\text{verificados}} + \text{Predicciones Ignoradas}} = \frac{1.135 + 587}{1.135 + 587 + 2.628} = 0,3959$$
-  Esto significa que de las $4.350$ cajas generadas en el barrido de 120 clases, $2.628$ cajas corresponden a categorías 'no verificadas' en esas imágenes específicas.  
-  No invalida el resultado en absoluto; de hecho, es la norma estándar documentada en el paper original de LVIS (Gupta et al., CVPR 2019). OWLv2 evalúa las 120 consultas de texto en paralelo sobre cada imagen. Muchas de esas clases pueden estar físicamente presentes en el fondo sin estar anotadas. Evaluar precisión únicamente sobre las $1.722$ predicciones verificables garantiza rigor estadístico sin inflar ni castigar artificialmente al modelo. Además, el balance final queda garantizado por el $F_1$-Score armónico de **0,6722**, el cual combina precisión y recall de manera estricta."
+  "La cobertura de evaluación de LVIS cuantifica la fracción de predicciones generadas por el modelo que caen en categorías formalmente auditables (positivas o negativas verificadas):
+  $$\text{Cobertura} = \frac{TP + FP_{\text{pos}} + FP_{\text{neg}}}{TP + FP_{\text{pos}} + FP_{\text{neg}} + \text{Ignoradas}}$$
+  En la V3 final, la cobertura aumentó de 0,3959 a **0,4249**. Esto significa que más del 42% de las predicciones recaen sobre el conjunto auditable.  
+  No invalida el resultado en absoluto; es la norma estándar documentada en el paper original de LVIS (Gupta et al., CVPR 2019). OWLv2 evalúa las 120 consultas de texto en paralelo sobre cada imagen. Muchas de esas clases pueden estar físicamente en el fondo sin estar anotadas. Evaluar precisión sobre las predicciones verificables garantiza rigor estadístico sin inflar ni castigar artificialmente al modelo. Además, el balance final queda garantizado por el $F_1$-Score armónico de **0,6722**, que penaliza enérgicamente configuraciones desbalanceadas."
 
 ---
 
@@ -204,7 +220,7 @@ Organizado en 7 bloques temáticos rigurosos con formulación matemática y refe
 
 #### Pregunta B.1: "¿Por qué utilizaron la combinación desacoplada OWLv2 + SAM2 en lugar de un detector entrenado de extremo a extremo como Mask R-CNN o YOLOv8-Seg?"
 - **Respuesta Técnica Fundamentada:**  
-  "Los modelos tradicionales como Mask R-CNN o YOLOv8 son detectores de **vocabulario cerrado**: su cabeza de clasificación final es una capa lineal fija que mapea a un número estático de clases preentrenadas (habitualmente 80 de COCO). Adaptarlos al vocabulario de 120 clases de LVIS hubiera requerido reentrenar o ajustar finamente la red con un conjunto de datos masivo con máscaras píxel a píxel, lo cual generaría severo sobreajuste dado el tamaño acotado del conjunto de desarrollo (120 imágenes) y la escasez de muestras en la cola larga.  
+  "Los detectores tradicionales como Mask R-CNN o YOLOv8 son de **vocabulario cerrado**: su cabeza de clasificación final es una capa lineal fija que mapea a un número estático de clases preentrenadas (habitualmente 80 de COCO). Adaptarlos al vocabulario de 120 clases de LVIS hubiera requerido reentrenar o ajustar finamente la red con un conjunto de datos masivo con máscaras píxel a píxel, lo cual generaría severo sobreajuste dado el tamaño acotado del conjunto de desarrollo (120 imágenes) y la escasez de muestras en la cola larga.  
   Adoptar un enfoque modular fundacional desacoplado ofrece ventajas insuperables:
   1. **OWLv2 (`google/owlv2-base-patch16-ensemble`)** aprovecha un espacio multimodal preentrenado contrastivamente (ViT-B/16 con alineación CLIP-like). Permite consultar dinámicamente cualquier vocabulario en lenguaje natural en tiempo de inferencia sin requerir una sola época de backpropagation ni modificar los pesos de la red.
   2. **SAM2 (`sam2_hiera_small.pt`)** fue entrenado sobre SA-1B (más de mil millones de máscaras). Su decodificador espacial recibe la caja delimitadora de OWLv2 como prompt geométrico y genera la máscara de segmentación con precisión a nivel de píxel.
@@ -215,24 +231,24 @@ Organizado en 7 bloques temáticos rigurosos con formulación matemática y refe
 - **Respuesta Técnica Fundamentada:**  
   "La cátedra prohibió los VLMs directos porque actúan como 'cajas negras' no auditables que sufren de **alucinación perceptual y espacial**:
   1. *Falta de interpretabilidad:* Si un VLM responde que hay '4 sillas', es imposible determinar si vio 4 sillas reales, si alucinó basándose en el contexto del texto, o si contó la misma silla dos veces.
-  2. *Incapacidad geométrica estricta:* Los modelos autorregresivos de visión-lenguaje son notoriously malos prediciendo coordenadas numéricas continuas y máscaras binarias precisas.
+  2. *Incapacidad geométrica estricta:* Los modelos autorregresivos de visión-lenguaje fallan prediciendo coordenadas numéricas continuas y máscaras binarias precisas.
   
   Nuestra arquitectura **neuro-simbólica** resuelve esto mediante un contrato formal de representación intermedia (`SceneJSON`):
   - La red neuronal profunda (OWLv2 + SAM2) se encarga exclusivamente de la **percepción continua** (extracción de características, localización y segmentación).
-  - La información visual se 'cristaliza' en un grafo simbólico determinista con identificadores unívocos, categorías discretas, centroides discretizados en 3x3 y máscaras RLE.
+  - La información visual se 'cristaliza' en un grafo simbólico determinista con identificadores unívocos, categorías discretas, centroides en grilla 3x3 y máscaras RLE.
   - El razonamiento (conteo, existencia, relaciones espaciales) es ejecutado por un motor algorítmico determinista. Si el sistema dice que hay '4 sillas', el JSON lista exactamente los `object_id: [1, 5, 8, 12]` con sus máscaras auditables. Garantiza **cero alucinación factual** y reproducibilidad matemática absoluta."
 
-#### Pregunta B.3: "¿Cuáles son los trade-offs críticos de latencia vs precisión entre la Línea Base (V1) y la versión multiescala (V3)?"
+#### Pregunta B.3: "¿Cuáles son los trade-offs de latencia vs precisión entre la Línea Base (V1) y la versión multiescala (V3)?"
 - **Respuesta Técnica Fundamentada:**  
-  "El análisis de costo computacional documentado en la Sección 13 del notebook revela los siguientes compromisos de ingeniería:
-  - **Línea Base (V1):** Realiza una única pasada inferencial de OWLv2 a resolución $960 \times 960$. Latencia media: **1,25 segundos por imagen** (Detección: 0,82s, SAM2: 0,32s, SceneJSON: 0,11s).
-  - **Pipeline V3 (Multiescala):** Ejecuta 5 pasadas inferenciales de OWLv2 (1 imagen global + 4 mosaicos de alta resolución). Latencia media: **3,25 segundos por imagen** (un factor de $2,6\times$).
-    - Detección multiescala: $2,44\text{ s}$ ($75,08\%$ del tiempo total).
-    - Segmentación SAM2: $0,43\text{ s}$ ($13,23\%$).
-    - Construcción SceneJSON: $0,28\text{ s}$ ($8,62\%$).
-    - Validación sintáctica: $0,09\text{ s}$ ($2,77\%$).
+  "El análisis de costo computacional medido en GPU y documentado en la Sección 5.6 de `INFORME_TPI_IA_2026P_21.md` revela los siguientes compromisos:
+  - **Línea Base (V1):** Realiza una única pasada de OWLv2 a resolución $960 \times 960$. Latencia media: **1,26 segundos por imagen** (Detección: 0,42s, SAM2: 0,43s, SceneJSON: 0,30s, Validación: 0,10s).
+  - **Pipeline V3 (Multiescala):** Ejecuta 5 pasadas de OWLv2 (1 imagen global + 4 mosaicos). Latencia media: **2,87 segundos por imagen** (un factor de $2,3\times$).
+    - Detección multiescala: **2,22 s** (77,4% del tiempo total).
+    - Segmentación SAM2: **0,39 s** (13,6%).
+    - Construcción SceneJSON: **0,19 s** (6,6%).
+    - Validación de esquema: **0,06 s** (2,1%).
   
-  *Justificación del trade-off:* Para un sistema de comprensión de escenas offline (como la evaluación de 80 imágenes en Kaggle), pasar de 1,25s a 3,25s por imagen es un costo plenamente asumible en una GPU Nvidia T4 (el procesamiento del batch completo insume menos de 5 minutos, muy por debajo del límite de 9 horas de Kaggle). A cambio de esa latencia adicional, el $F_1$ de cajas se elevó de 0,6464 a 0,6722 y el score de Kaggle saltó de 0,6615 a 0,6800. La inversión computacional estuvo directamente correlacionada con la ganancia en exactitud."
+  *Justificación del trade-off:* Para un sistema de comprensión de escenas offline, procesar las 80 imágenes del conjunto de test (`submission.csv`) insume escasos **3,8 minutos** en una GPU Nvidia estándar, un margen insignificante frente al límite de 9 horas de Kaggle. A cambio de 1,6 segundos adicionales por imagen, el $F_1$ de cajas se elevó de 0,6464 a **0,6722**, el $F1$ de máscaras subió a **0,6351** y el score de Kaggle saltó de 0,6615 a **0,6926** (+0,0311 neto). La inversión computacional estuvo directamente correlacionada con la ganancia en exactitud."
 
 ---
 
@@ -240,40 +256,41 @@ Organizado en 7 bloques temáticos rigurosos con formulación matemática y refe
 
 #### Pregunta C.1: "¿Cómo se realizó el barrido bidimensional de hiperparámetros y qué criterio matemático guio la elección de los umbrales óptimos?"
 - **Respuesta Técnica Fundamentada:**  
-  "En la Sección 8 del notebook implementamos un barrido en grilla (*Grid Search*) bidimensional sobre las 120 imágenes del conjunto de desarrollo:
+  "En la Sección 4.2 del informe implementamos un barrido en grilla (*Grid Search*) bidimensional sobre las 120 imágenes del conjunto de desarrollo:
   - Rango de confianza evaluado: $\tau_{\text{conf}} \in [0,12; 0,50]$ con paso de $0,01$.
   - Rango de IoU para Non-Maximum Suppression: $\tau_{\text{NMS}} \in [0,25; 0,50]$ con paso de $0,05$.
-  - Función objetivo optimizada (Score de Percepción de la Cátedra):
+  - Para no repetir la inferencia de red neuronal en cada combinación, se ejecutó OWLv2 una única vez con umbral permisivo de 0,10 y luego se aplicaron los filtros de confianza matricialmente sobre las cajas guardadas.
+  - Función objetivo optimizada (Score de Percepción):
     $$S_{\text{perc}} = 0,40 \cdot F_{1,\text{box}}(\tau_{\text{conf}}, \tau_{\text{NMS}}) + 0,35 \cdot F_{1,\text{mask}}(\tau_{\text{conf}}, \tau_{\text{NMS}})$$
   
   En la Línea Base V1 teníamos $(\tau_{\text{conf}}=0,15, \tau_{\text{NMS}}=0,30)$ con $S_{\text{perc}} = 0,4730$.  
-  El barrido identificó un óptimo local sin mosaicos en $(\tau_{\text{conf}}=0,17, \tau_{\text{NMS}}=0,35)$ con $S_{\text{perc}} = 0,4787$ ($+0,0057$). Esta configuración constituyó la entrega V2 y produjo un salto inmediato en el Leaderboard de Kaggle de 0,6615 a 0,6763.  
-  Posteriormente, al incorporar los mosaicos multiescala en V3, la mayor densidad de propuestas exigió subir el umbral de confianza a $\tau_{\text{conf}} = 0,23$ y mantener $\tau_{\text{NMS}} = 0,30$. Este umbral más estricto eliminó masivamente falsos positivos en el fondo sin degradar el recall, ya que los objetos pequeños compensaron su score gracias al zoom digital de los mosaicos."
+  El barrido identificó el óptimo sin mosaicos en $(\tau_{\text{conf}}=0,17, \tau_{\text{NMS}}=0,35)$ con $S_{\text{perc}} = 0,4787$ ($+0,0057$), que constituyó la entrega V2 y produjo un score en Kaggle de **0,6763**.  
+  Sin embargo, el ajuste de umbrales cambia el balance precisión-recall pero no crea información nueva: no recupera objetos que el detector nunca vio. Por eso fue imperativo avanzar hacia la inferencia multiescala en V3."
 
-#### Pregunta C.2: "¿Por qué el experimento de corrección de padding (`pad_fix`) arrojó una mejora matemática exactamente de 0,0000 ($\Delta = 0,0000$)?"
+#### Pregunta C.2: "¿Por qué falló la Hipótesis H1 al escalar a OWLv2 Large (peor F1 y 4,7x mayor latencia)?"
 - **Respuesta Técnica Fundamentada:**  
-  "En la Sección 7 del notebook formulamos la hipótesis de que, al convertir las imágenes no cuadradas ($640 \times 480$) en tensores cuadrados ($960 \times 960$) con padding para OWLv2, las coordenadas relativas predichas por la red sufrían una distorsión anisótropa si se desnormalizaban asumiendo el ancho y alto originales de forma independiente. Implementamos una rutina manual `pad_fix` para compensar el padding en el lado menor (`side = max(W, H)`).  
-  Al reevaluar el pipeline completo sobre las 120 imágenes, **la diferencia en todas las métricas de cajas, máscaras y VQA fue idénticamente 0,0000**.  
-  *Causa técnica descubierta:* Al auditar el código fuente del procesador de Hugging Face (`Owlv2Processor.post_process_object_detection`), verificamos que la biblioteca ya aplica internamente la inversión geométrica exacta del padding y redimensionamiento cuando se le suministra el argumento `target_sizes`. Nuestra función externa estaba compensando una distorsión que el framework ya corregía de manera transparente. Siguiendo el principio de parsimonia y optimización de código, desactivamos esa rutina redundante."
-
-#### Pregunta C.3: "¿Por qué falló la Hipótesis H1 al escalar a OWLv2 Large (peor F1 y 4,7x mayor latencia)?"
-- **Respuesta Técnica Fundamentada:**  
-  "En la Sección 9 evaluamos el detector escalado `google/owlv2-large-patch14-ensemble` (resolución $1008 \times 1008$, parches de 14 px) bajo la hipótesis clásica de que un modelo con mayor capacidad paramétrica mejoraría la percepción.  
+  "En la Sección 4.3 evaluamos el detector escalado `google/owlv2-large-patch14-ensemble` (resolución $1008 \times 1008$, parches de 14 px, arquitectura ViT-L/14 con más de 400M parámetros) bajo la hipótesis clásica de que mayor capacidad paramétrica aumentaría el recall.  
   Los resultados empíricos forzaron el **rechazo inmediato de la hipótesis**:
-  - OWLv2 Base (ViT-B/16): $F1_{box} = 0,651$, $F1_{mask} = 0,620$, Latencia = **2,44 s/img**.
-  - OWLv2 Large (ViT-L/14): $F1_{box} = 0,626$ ($-0,025$), $F1_{mask} = 0,586$ ($-0,034$), Latencia = **11,45 s/img** ($4,7\times$ más lento).
+  - OWLv2 Base: $F1_{box} = \mathbf{0,651}$, $F1_{mask} = \mathbf{0,620}$, Score Percepción = $\mathbf{0,4771}$, Latencia = **2,44 s/img**.
+  - OWLv2 Large: $F1_{box} = 0,626$ ($-0,025$), $F1_{mask} = 0,586$ ($-0,034$), Score Percepción = $0,4555$, Latencia = **11,45 s/img** ($4,7\times$ más lento).
   
-  *Explicación teórica:* El espacio de representación semántica de OWLv2 Large es mucho más denso y propenso a activar similitudes marginales cuando se le inyectan simultáneamente 120 consultas textuales en imágenes de interiores. El modelo generó una **explosión masiva de falsos positivos** en clases visualmente ambiguas (ej. confundiendo sombras y molduras con objetos reales), deteriorando severamente la precisión. Además, un incremento de 4,7 veces en tiempo de cómputo volvía inviable el pipeline en hardware estándar de Kaggle."
+  *Diagnóstico Teórico:* El espacio de representación latente de OWLv2 Large es mucho más plástico y sensible. Al inyectar simultáneamente 120 consultas textuales en escenas densas, el modelo produjo una proliferación masiva de **falsos positivos en fondos ambiguos** (sombras, texturas de paredes, molduras) sin mejorar el recall en objetos pequeños. Multiplicar por 4,7 el tiempo de ejecución degradando las métricas justificó plenamente mantener OWLv2 Base."
 
-#### Pregunta C.4: "¿Por qué el modo `single-mask` de SAM2 superó consistentemente al modo `multimask` (`best_score` y `box_iou`)?"
+#### Pregunta C.3: "¿Por qué el modo `single-mask` de SAM2 superó al modo `multimask` (`best_score` y `box_iou`)?"
 - **Respuesta Técnica Fundamentada:**  
-  "SAM2 incorpora un decodificador de máscaras diseñado para resolver la ambigüedad inherente de los prompts puntuales: cuando se le entrega un punto, el objeto puede ser una parte, el subcomponente o la totalidad del cuerpo; por ende, `multimask_output = True` genera 3 hipótesis jerárquicas de máscara con sus correspondientes scores de calidad predichos.  
-  En la Sección 11 contrastamos tres estrategias de selección de máscara alimentadas por las cajas de OWLv2:
+  "SAM2 incorpora un decodificador de máscaras diseñado para resolver la ambigüedad inherente de los prompts puntuales: cuando se le entrega un único punto, el objeto puede ser una parte, el subcomponente o la totalidad del cuerpo; por ende, `multimask_output = True` genera 3 hipótesis jerárquicas de máscara con sus correspondientes scores predichos.  
+  En las Secciones 4.5 y 6.2 evaluamos tres estrategias alimentadas por las cajas de OWLv2:
   1. Modo `single` (`multimask=False`): $F1_{mask} = \mathbf{0,627}$, IoU medio = $\mathbf{0,789}$, IoU en objetos pequeños = $\mathbf{0,753}$.
-  2. Modo `best_score` (seleccionar la hipótesis con mayor IoU predicho por SAM2): $F1_{mask} = 0,590$, IoU medio = $0,746$.
-  3. Modo `box_iou` (seleccionar la máscara cuya caja envolvente tenga mayor IoU con el prompt de OWLv2): $F1_{mask} = 0,608$, IoU medio = $0,759$.
+  2. Modo `best_score` (elegir la hipótesis con mayor IoU predicho por SAM2): $F1_{mask} = 0,590$, IoU medio = $0,746$.
+  3. Modo `box_iou` (elegir la máscara con mayor IoU respecto a la caja): $F1_{mask} = 0,608$, IoU medio = $0,759$.
   
-  *Causa física de la degradación:* Cuando el prompt es una **bounding box acotada** (y no un punto ambiguo), la frontera geométrica exterior del objeto ya está delimitada por la caja. En el 71% de objetos pequeños del dataset, el estimador interno de calidad de SAM2 suele asignar mayor puntuación a subpartes internas de alto contraste (sobre-segmentación) o a regiones que incorporan fondo ruidoso. El modo `single` está optimizado para colapsar en la máscara integral que llena el prompt cuadrangular, demostrando ser el más robusto empíricamente."
+  *Causa física de la degradación:* Cuando el prompt es una **bounding box acotada**, la frontera geométrica exterior del objeto ya está delimitada. En el 71% de objetos pequeños del dataset, el estimador interno de SAM2 tiende a puntuar más alto a subpartes internas de alto contraste (sobre-segmentación) o a englobar regiones del fondo contiguo. El modo monomáscara singular de SAM2 resultó ser el más consistente y robusto."
+
+#### Pregunta C.4: "¿Por qué se rechazó el NMS entre clases (cross-class NMS)?"
+- **Respuesta Técnica Fundamentada:**  
+  "En la Sección 4.4 y 6.2 probamos aplicar NMS suprimiendo cajas fuertemente superpuestas de categorías distintas (por ejemplo, si se predecían `traffic light` y `streetlight` en el mismo poste).  
+  *Resultado:* El F1 de cajas **bajó de 0,6722 a 0,6708**.  
+  *Causa:* En escenas del mundo real existen objetos legítimos anidados o en contacto estrecho de categorías diferentes: prendas de vestir sobre personas (`jacket` o `shirt` sobre `person`), alimentos sobre platos o vajilla sobre mesas (`cup` sobre `table`). El NMS entre clases suprime objetos reales correctos al colisionar espacialmente, por lo que mantuvimos el **NMS por clase independiente**."
 
 ---
 
@@ -281,17 +298,17 @@ Organizado en 7 bloques temáticos rigurosos con formulación matemática y refe
 
 #### Pregunta D.1: "Explique la formulación matemática de los mosaicos 2x2 con 25% de solapamiento y demuestre cómo produce un boost efectivo de ~1,75x en resolución espacial."
 - **Respuesta Técnica Fundamentada:**  
-  "Sea una imagen de dimensiones $W \times H$. Si dividimos el dominio en $N_x = 2$ particiones horizontales y $N_y = 2$ verticales, permitiendo una fracción de solapamiento $\phi = 0,25$ ($25\%$), el ancho $tw$ y alto $th$ de cada ventana de mosaico se deduce de la cobertura total:
+  "Sea una imagen de entrada de dimensiones $W \times H$. Si dividimos el dominio en $N_x = 2$ particiones horizontales y $N_y = 2$ verticales con una fracción de solapamiento $\phi = 0,25$ ($25\%$), el ancho $tw$ y alto $th$ de cada ventana de mosaico se deduce de la cobertura geométrica total:
   $$W = N_x \cdot tw - (N_x - 1) \cdot \phi \cdot tw = tw \cdot [2 - (1) \cdot 0,25] = tw \cdot 1,75$$
   Despejando las dimensiones de cada mosaico:
   $$tw = \left\lceil \frac{W}{1,75} \right\rceil, \qquad th = \left\lceil \frac{H}{1,75} \right\rceil$$
   Para una imagen estándar del dataset de $640 \times 480$ píxeles:
   $$tw = \left\lceil \frac{640}{1,75} \right\rceil = 366\text{ px}, \qquad th = \left\lceil \frac{480}{1,75} \right\rceil = 275\text{ px}$$
   
-  Cuando ese recorte de $366 \times 275$ px se introduce al preprocesador de OWLv2, la red lo interpola y escala a su tamaño nativo de inferencia de $960 \times 960$ px.  
+  Cuando ese recorte de $366 \times 275$ px se introduce al procesador de OWLv2, la red lo escala a su tamaño nativo de inferencia de $960 \times 960$ px.  
   El factor de magnificación lineal efectivo sobre la imagen original viene dado por la relación de escalas:
   $$\text{Zoom Lineal} = \frac{W}{tw} = \frac{640}{366} \approx 1,75\times$$
-  En términos de densidad superficial de muestreo de información, el incremento de resolución en área equivale a $(1,75)^2 \approx 3,06\times$. Esto significa que un objeto diminuto que en la imagen completa ocupaba una mancha de $8 \times 8$ píxeles, dentro del mosaico pasa a representarse con $14 \times 14$ píxeles, cruzando el umbral de discriminación del Vision Transformer."
+  En términos de densidad superficial de muestreo de información, el incremento de resolución en área equivale a $(1,75)^2 \approx 3,06\times$. Esto significa que un objeto diminuto que en la imagen completa cubría una mancha de $8 \times 8$ píxeles, dentro del mosaico pasa a representarse con $14 \times 14$ píxeles, cruzando el umbral de discriminación del Vision Transformer."
 
 #### Pregunta D.2: "¿Por qué la arquitectura Vision Transformer (ViT-B/16) presenta un límite intrínseco de resolución para objetos pequeños con parches de 16x16 píxeles?"
 - **Respuesta Técnica Fundamentada:**  
@@ -299,17 +316,26 @@ Organizado en 7 bloques temáticos rigurosos con formulación matemática y refe
   $$N_{\text{tokens}} = \left(\frac{960}{16}\right) \times \left(\frac{960}{16}\right) = 60 \times 60 = 3.600\text{ tokens espaciales}$$
   Cada parche de $16 \times 16$ píxeles se proyecta linealmente a un único vector de embedding mediante una convolución 2D con kernel $16 \times 16$ y stride 16.  
   *El cuello de botella físico:* Si un objeto pequeño en la imagen original mide $10 \times 10$ píxeles, al reescalarse a la imagen global de $960 \times 960$ ocupará aproximadamente $15 \times 15$ píxeles. Esto significa que **el objeto entero cae dentro de un único parche de token visual**.  
-  Dentro de un token individual, la auto-atención del Transformer no puede resolver relaciones espaciales internas ni bordes; toda la señal del objeto se promedia con los píxeles de fondo que comparten ese parche. Como consecuencia, el embedding visual pierde las altas frecuencias espaciales y colapsa la similitud coseno con el texto de la clase.  
+  Dentro de un token individual, la auto-atención del Transformer no puede resolver relaciones espaciales internas ni gradientes de borde; toda la señal del objeto se promedia con los píxeles de fondo que comparten ese parche. Como consecuencia, el embedding visual pierde las altas frecuencias espaciales y colapsa la similitud coseno con la consulta de texto de la clase.  
   Al aplicar el mosaico multiescala con zoom $1,75\times$, ese mismo objeto pasa a abarcar entre 3 y 4 parches contiguos, permitiendo que el mecanismo de atención capture contornos discriminantes y recupere la detección."
 
-#### Pregunta D.3: "¿Cómo opera el filtrado geométrico de recortes (descarte por borde interno y límite de área máxima) y su unificación mediante NMS?"
+#### Pregunta D.3: "¿Cómo opera el filtrado geométrico de recortes y la unificación de detecciones?"
 - **Respuesta Técnica Fundamentada:**  
-  "Procesar ventanas independientes introduce dos patologías geométricas que resolvimos algorítmicamente en la Sección 10.1:
-  1. **Filtrado por Borde Interno (`edge_px = 4`):** Cuando una ventana corta arbitrariamente la escena, un objeto grande o mediano puede quedar seccionado por la mitad. El detector en el mosaico detectaría la mitad visible y predeciría una caja falsa incompleta. Si cualquier coordenada de la caja predicha se encuentra a menos de 4 píxeles del límite interior del recorte (los bordes que no coinciden con el perímetro de la imagen global), la detección se descarta formalmente:
+  "Procesar ventanas independientes introduce patologías de borde que resolvimos algorítmicamente en la Sección 2.3:
+  1. **Filtrado por Borde Interno (`edge_px = 4`):** Cuando una ventana corta arbitrariamente la escena, un objeto grande o mediano puede quedar seccionado por la mitad. El detector en el mosaico detectaría la mitad visible y predeciría una caja falsa incompleta. Si cualquier coordenada de la caja predicha se encuentra a menos de 4 píxeles del límite interior del recorte, la detección se descarta formalmente:
      $$\text{si } x_{\min} \le 4 \text{ o } y_{\min} \le 4 \text{ o } x_{\max} \ge (tw - 4) \text{ o } y_{\max} \ge (th - 4) \implies \text{Descartar}$$
   2. **Filtrado por Área Máxima (`tile_max_area = 0.10`):** Los mosaicos fueron diseñados exclusivamente para rescatar objetos pequeños. Si en un mosaico se detecta un objeto cuya área calculada supera el 10% del área total de la imagen completa, se suprime, delegando su detección a la pasada de imagen global donde se tiene el contexto semántico completo.
   
-  *Unificación global:* Las cajas supervivientes se proyectan al sistema de coordenadas de la imagen completa sumando el desplazamiento del cuadrante $(x + x_0, y + y_0)$. Finalmente, concatenamos las predicciones de la imagen global con las de los 4 mosaicos y ejecutamos un **NMS por clase batched** (`torchvision.ops.batched_nms`) con $\tau_{\text{NMS}} = 0,30$. Las detecciones de mosaicos y de escala global se fusionan armónicamente eliminando duplicados."
+  *Unificación global:* Las cajas supervivientes se proyectan al sistema de coordenadas de la imagen completa sumando el desplazamiento del cuadrante $(x + x_0, y + y_0)$. Finalmente, concatenamos las predicciones de la imagen global con las de los 4 mosaicos y ejecutamos un **NMS por clase batched** (`torchvision.ops.batched_nms`) con $\tau_{\text{NMS}} = 0,30$."
+
+#### Pregunta D.4: "¿Cómo funciona el umbral adaptativo para cajas grandes y por qué fue necesario?"
+- **Respuesta Técnica Fundamentada:**  
+  "En la Sección 4.4 descubrimos que al adoptar el umbral uniforme estricto de 0,23 para suprimir falsos positivos en los mosaicos, el recall en objetos grandes (`large`) cayó drásticamente de 0,852 a 0,693, porque algunos objetos voluminosos pero oscuros o con texturas complejas quedaban justo por debajo de 0,23.  
+  Para solucionarlo sin volver a correr la red neuronal, aplicamos una regla adaptativa:
+  - Cajas provenientes de la pasada global con área $\ge 5\%$ del área total de la imagen: **umbral permisivo de 0,15**.
+  - Cajas restantes (incluyendo todas las de los mosaicos): **umbral estricto de 0,23**.
+  
+  Esta simple decisión elevó el F1 de cajas a **0,6722**, el F1 de máscaras a **0,6351** y devolvió el recall de objetos grandes exactamente a **0,852**, logrando el mejor score de percepción de todo el proyecto (**0,4912**)."
 
 ---
 
@@ -318,23 +344,25 @@ Organizado en 7 bloques temáticos rigurosos con formulación matemática y refe
 #### Pregunta E.1: "¿Cuál es la estructura formal del esquema `SceneJSON` y por qué es obligatorio utilizar compresión RLE en orden Fortran (column-major)?"
 - **Respuesta Técnica Fundamentada:**  
   "El objeto `SceneJSON` responde a la especificación formal validada contra `scene_schema.json` mediante `jsonschema.Draft7Validator`. Posee tres componentes jerárquicos:
-  1. `image`: Metadatos contextuales (`image_id`, dimensiones de imagen $W, H$).
+  1. `image`: Metadatos contextuales (`id`, dimensiones $W, H$).
   2. `objects`: Lista de instancias detectadas, donde cada entrada contiene:
-     - `object_id`: Entero secuencial unívoco.
-     - `category`: Nombre de la clase validada dentro de las 120 categorías.
+     - `id`: Cadena secuencial unívoca (ej. `obj_1`).
+     - `category`: Nombre de la clase validada dentro de las 120 categorías oficiales.
      - `confidence`: Probabilidad empírica calibrada $[0, 1]$.
-     - `bbox`: Coordenadas normalizadas $[x_{\min}, y_{\min}, w, h]$ en $[0, 1]$.
-     - `centroid_3x3`: Categoría discreta de posición en la grilla topológica.
-     - `relative_size`: Categoría ordinal de escala (`small`, `medium`, `large`).
-     - `dominant_color`: Etiqueta cromática proyectada sobre paleta de 11 colores.
-     - `segmentation`: Diccionario con la máscara codificada en RLE (`counts` y `size`).
-  3. `relations`: Lista de tripletas relacionales $\langle \text{obj}_i, \text{predicado}, \text{obj}_j \rangle$.
+     - `bbox`: Coordenadas absolutas $[x_{\min}, y_{\min}, w, h]$ en píxeles.
+     - `area`: Área en píxeles calculada sobre la máscara binaria.
+     - `centroid`: Coordenadas flotantes del centroide $[x, y]$.
+     - `position`: Celda en la cuadrícula topológica $3 \times 3$ (`top_left` a `bottom_right`).
+     - `size`: Escala geométrica ordinal (`small`, `medium`, `large`).
+     - `color`: Color dominante proyectado sobre paleta estandarizada de 11 colores.
+     - `mask_rle`: Diccionario con la máscara codificada en RLE (`counts` y `size`).
+  3. `relations`: Lista de tripletas relacionales `{"subject": id_1, "predicate": "...", "object": id_2}`.
   
   *Justificación del orden Fortran (`order="F"`):*  
-  En Python/NumPy, los arreglos se almacenan por defecto en memoria siguiendo el orden de filas o Row-Major (orden 'C'). Sin embargo, las especificaciones canónicas de evaluación de segmentación de COCO y LVIS (implementadas en `pycocotools.mask.encode`) exigen estrictamente el almacenamiento en **orden de columnas o Column-Major (orden Fortran 'F')**.  
+  En Python/NumPy, los arreglos se almacenan por defecto en memoria en orden de filas (Row-Major o C-order). Sin embargo, las especificaciones canónicas de COCO y LVIS (implementadas en `pycocotools.mask.encode`) exigen estrictamente el almacenamiento en **orden de columnas o Column-Major (orden Fortran 'F')**.  
   Si se serializa una máscara binaria en orden 'C', el algoritmo RLE agrupa las secuencias de ceros y unos leyendo horizontalmente; al decodificarlo en `pycocotools`, la librería lo interpreta verticalmente, lo que produce una **transposición geométrica de la máscara** ($x \leftrightarrow y$). Esto destruiría por completo la métrica de IoU frente al ground truth. Garantizar `np.asfortranarray(mask.astype(np.uint8))` en `mask_to_rle` fue mandatorio para alcanzar 100% de consistencia de schema."
 
-#### Pregunta E.2: "¿Cómo opera la cuantización espacial del centroide en la grilla 3x3 y cómo se calculan las relaciones espaciales entre objetos?"
+#### Pregunta E.2: "¿Cómo opera la discretización del centroide en la grilla 3x3 y cómo se calculan las relaciones espaciales?"
 - **Respuesta Técnica Fundamentada:**  
   "La discretización del plano continuo en la grilla de $3 \times 3$ celdas se ejecuta sobre el centroide de masa $(\bar{x}, \bar{y})$ calculado a partir de los momentos espaciales de la máscara binaria $M(x, y)$:
   $$\bar{x} = \frac{\sum_{x, y} x \cdot M(x, y)}{\sum_{x, y} M(x, y)}, \qquad \bar{y} = \frac{\sum_{x, y} y \cdot M(x, y)}{\sum_{x, y} M(x, y)}$$
@@ -354,23 +382,23 @@ Organizado en 7 bloques temáticos rigurosos con formulación matemática y refe
 - **Respuesta Técnica Fundamentada:**  
   "El módulo VQA opera bajo una estricta arquitectura desacoplada de tres capas:
   1. **Capa 1: Intérprete de Lenguaje Natural (`Qwen2.5-1.5B-Instruct`):**  
-     El modelo de lenguaje pequeño solo recibe la pregunta en lenguaje natural. Su única función es actuar como un parser semántico guiado por un system prompt altamente restrictivo (`INTERP_SYSTEM_V3`), emitiendo un objeto JSON formal estructurado (`QUERY_SPEC`) con los campos: `intent` (`existence`, `count`, `position`, `size`, `relation`, `description`), `target_class`, `ref_class` y `spatial_predicate`. **El LLM no tiene acceso a la imagen ni a los datos de la escena**, anulando cualquier posibilidad de que invente respuestas fácticas.
+     El modelo de lenguaje pequeño solo recibe la pregunta en lenguaje natural. Su única función es actuar como un parser semántico guiado por un system prompt altamente restrictivo, emitiendo un objeto JSON formal estructurado (`QUERY_SPEC`) con los campos: `intent` (`existence`, `count`, `position`, `size`, `relation`, `description`), `target_class`, `ref_class` y `spatial_predicate`. **El LLM no tiene acceso a la imagen ni a los datos de la escena**, anulando cualquier posibilidad de que invente respuestas fácticas.
   2. **Capa 2: Motor Determinista Factual (`QAEngine`):**  
      Recibe el `QUERY_SPEC` y ejecuta una consulta lógica sobre el `SceneJSON` de la imagen mediante código Python puro.
      - Si la intención es `count`, cuenta las instancias filtradas por la categoría requerida.
      - Si es `existence`, verifica si el conteo es $>0$.
-     - Si es `position`, extrae el `centroid_3x3` del objeto correspondiente.
+     - Si es `position`, extrae el cuadrante topológico del objeto correspondiente.
      - La respuesta es matemáticamente infalible y genera una traza de auditoría con la lista de `evidence: [object_ids]`.
   3. **Capa 3: Verbalizador y Filtro de Fidelidad (`is_faithful`):**  
-     Para responder en lenguaje natural fluido, un generador produce la oración final. Sin embargo, un filtro algorítmico determinista (`is_faithful`) analiza por expresiones regulares si los números, categorías o cuadrantes citados en el texto del LLM coinciden estrictamente con los devueltos por el motor determinista. Si el LLM comete una inconsistencia, el sistema aborta automáticamente y emite la respuesta generada por una plantilla fija predefinida. Esta arquitectura garantizó un **100% de evidencia auditada** y elevó la exactitud de VQA a **0,7895**."
+     Para responder en lenguaje natural fluido, un generador produce la oración final. Sin embargo, un filtro algorítmico determinista (`is_faithful`) analiza si los números, categorías o cuadrantes citados en el texto del LLM coinciden estrictamente con los devueltos por el motor determinista. Si el LLM comete una inconsistencia, el sistema aborta automáticamente y emite la respuesta generada por una plantilla fija predefinida. Esta arquitectura garantizó un **100% de evidencia auditada** y elevó la exactitud de VQA determinista a **0,7895**."
 
 #### Pregunta E.4: "¿En qué consiste el bucle de autocorrección con reintento (`interpret_with_retry`) y la política de ausencia derivada (`not_detected`)?"
 - **Respuesta Técnica Fundamentada:**  
-  "Representan las dos mejoras clave introducidas en la versión V3 para resolver fallas sistémicas observadas en la línea base:
+  "Representan las dos mejoras clave introducidas en V3 para resolver fallas sistémicas observadas en la línea base:
   1. **Autocorrección con Reintento (`interpret_with_retry`):**  
-     En V1, si el LLM emitía un JSON mal formateado o nombraba una categoría inexistente en el vocabulario oficial de 120 clases (ej. interpretaba 'luminaria' en lugar de 'streetlight'), la consulta colapsaba en error. En V3 implementamos un mecanismo iterativo: si el validador sintáctico falla, se extrae el término problemático, se computa la **similitud coseno entre su embedding textual y los embeddings de las 120 clases de OWLv2**, y se le suministran al LLM los 5 candidatos válidos más cercanos en un segundo prompt de rescate. Gracias a esto, la tasa de interpretación de preguntas de existencia subió del 80% al 90%, y las descripciones alcanzaron el **100% de éxito**.
+     En V1, si el LLM emitía un JSON mal formateado o nombraba una categoría inexistente en el vocabulario oficial de 120 clases (ej. interpretaba 'luminaria' en lugar de 'streetlight'), la consulta colapsaba en error. En V3 implementamos un mecanismo iterativo: si el validador sintáctico falla, se extrae el término problemático, se computa la **similitud coseno entre su embedding textual y los embeddings de las 120 clases de OWLv2**, y se le suministran al LLM los candidatos válidos más cercanos en un segundo prompt de rescate. Gracias a esto, la tasa de interpretación de preguntas de existencia subió al 90%, y las descripciones alcanzaron el **100% de éxito** (20/20).
   2. **Política de Ausencia Derivada (`not_detected`):**  
-     En V1, cuando el usuario preguntaba por un objeto ausente de la imagen (ej. '¿Hay un bote?'), el motor determinista devolvía `insufficient_information` porque la clase no estaba en la imagen ni en las negativas verificadas de LVIS. En una evaluación de QA humana, esto se computaba como error. En V3 establecimos formalmente que si no hay detecciones en el SceneJSON para esa categoría en preguntas de existencia, conteo o relación, el motor deriva una respuesta explícita: responde `'no'` o `'0'`, asignando una confianza derivada de $0,5$ y dejando un registro de auditoría en los metadatos indicando que la ausencia no está formalmente certificada por ground truth. Esto desbloqueó de inmediato un incremento masivo de exactitud en el benchmark."
+     En V1, cuando el usuario preguntaba por un objeto ausente de la imagen (ej. '¿Hay un bote?'), el motor determinista devolvía `insufficient_information` porque la clase no estaba en la imagen ni en las negativas verificadas de LVIS. En una evaluación de QA humana, esto se computaba como error. En V3 establecimos formalmente que si no hay detecciones en el SceneJSON para esa categoría en preguntas de existencia, conteo o relación, el motor deriva una respuesta explícita: responde `'no'` o `'0'`, asignando una confianza derivada de $0,5$ y dejando un registro de auditoría en los metadatos indicando que la ausencia no está formalmente certificada por ground truth. Esto desbloqueó de inmediato un incremento masivo de exactitud en el benchmark de preguntas."
 
 ---
 
@@ -378,22 +406,22 @@ Organizado en 7 bloques temáticos rigurosos con formulación matemática y refe
 
 #### Pregunta F.1: "¿Cuáles fueron las principales fuentes de Falsos Positivos observadas en el notebook y qué casos cualitativos concretos analizaron?"
 - **Respuesta Técnica Fundamentada:**  
-  "En el conjunto de desarrollo se detectaron 587 Falsos Positivos en la línea base, reducidos a 425 en V3. El análisis detallado de la Sección 12.6 reveló que **581 de esos 587 casos corresponden a categorías positivas presentes en la escena sin emparejar con el GT**, mientras que solo 6 casos correspondieron a clases formalmente negativas de LVIS.  
+  "En el conjunto de desarrollo se detectaron 587 Falsos Positivos en la línea base, reducidos a 425 en V3. El análisis detallado de la Sección 6.3 de `INFORME_TPI_IA_2026P_21.md` reveló que **581 de esos 587 casos corresponden a categorías positivas presentes en la escena sin emparejar con el GT por no alcanzar IoU $\ge 0,50$**, mientras que solo 6 casos correspondieron a clases formalmente negativas de LVIS. El detector suele acertar el concepto semántico pero fallar en la delimitación milimétrica de la caja.  
   Las principales causas sistemáticas fueron:
   1. *Confusión semántica y co-ocurrencia urbana:* `traffic light` acumuló 26 FP y `streetlight` 21 FP. Ambos objetos son luminarias metálicas situadas en la parte superior de postes urbanos. En tomas lejanas, el detector activó ambas consultas con scores similares para la misma entidad física.
   2. *Ambigüedad de formas geométricas repetitivas:* `ski` registró 19 FP, provocados por pasamanos, barandas de balcones y rejas metálicas horizontales que el modelo clasificó como esquíes.
   3. *Ruido de fondo en micro-objetos:* Clases como `sock` (16 FP), `knob` (16 FP) y `wall socket` (13 FP) proliferaron en paredes con interruptores y texturas complejas.
   
-  *Caso cualitativo destacado:* En la imagen `tpi_0085.jpg` (analizada en las Figuras 5 y 8), el detector demostró 'ceguera de materialidad': identificó un perro con confianza 0,1945 sobre lo que en realidad era una **estatua de piedra ornamental**, y predijo un elefante con confianza 0,4086 sobre un **bajo relieve tallado en una pared de roca**. OWLv2 detecta patrones texturales locales alineados al concepto semántico pero no modela si la entidad tiene vida orgánica o si es una escultura inanimada."
+  *Caso cualitativo destacado:* En la imagen `tpi_0085.jpg`, el detector demostró 'ceguera de materialidad': identificó un perro con confianza 0,1945 sobre lo que en realidad era una **estatua de piedra ornamental**, y predijo un elefante con confianza 0,4086 sobre un **bajo relieve tallado en una pared de roca** (superando incluso el umbral estricto de 0,23). OWLv2 detecta patrones texturales locales alineados al concepto semántico pero carece de un modelo físico que discierna si la entidad tiene vida orgánica o si es una escultura inanimada."
 
 #### Pregunta F.2: "¿Cuáles fueron los patrones dominantes de Falsos Negativos y por qué ciertas clases tuvieron un recall extremadamente bajo?"
 - **Respuesta Técnica Fundamentada:**  
-  "El análisis de los 655 Falsos Negativos documentó una correlación directa entre el tamaño relativo del objeto y la tasa de omisión:
+  "El análisis de los 655 Falsos Negativos de la línea base documentó una correlación directa entre el tamaño relativo del objeto y la tasa de omisión:
   - Objetos grandes (`large`): Recall = **0,852** (85,2%).
   - Objetos medianos (`medium`): Recall = **0,765** (76,5%).
   - Objetos pequeños (`small`): Recall = **0,575** (57,5%).
   
-  Al analizar las categorías con peor recall (con $\ge 5$ instancias), encontramos tres patrones físicos:
+  Al analizar las categorías con peor recall (con $\ge 5$ instancias, Tabla de la Sección 6.3), encontramos tres patrones físicos:
   1. *Estructuras filiformes delgadas:* `strap` (correas de bolsos y mochilas) tuvo un recall de apenas **0,174** (17,4% en 23 instancias). Las correas carecen de un parche interior homogéneo de $16 \times 16$ px; su trazo es absorbido por la convolución del parche contra el fondo.
   2. *Oclusión densa y apilamiento:* `book` registró un recall de **0,196** (19,6% en 46 instancias). En bibliotecas y estanterías hacinadas, los libros no aparecen como rectángulos frontales sino como lomos estrechos contiguos; el detector fusiona los libros adyacentes o los descarta por NMS.
   3. *Escala microscópica:* `doorknob` (pomo de puerta) obtuvo recall de **0,200** y `earring` (aro/pendiente) **0,333**, ocupando menos del 0,1% del área de la imagen."
@@ -417,7 +445,7 @@ Organizado en 7 bloques temáticos rigurosos con formulación matemática y refe
   $$F_1 = \frac{2 \cdot \left(\frac{TP}{TP + FP}\right) \cdot \left(\frac{TP}{TP + FN}\right)}{\frac{TP}{TP + FP} + \frac{TP}{TP + FN}} = \frac{2 \cdot \frac{TP^2}{(TP + FP)(TP + FN)}}{\frac{TP(TP + FN) + TP(TP + FP)}{(TP + FP)(TP + FN)}} = \frac{2 \cdot TP^2}{TP(2 \cdot TP + FP + FN)} = \frac{2 \cdot TP}{2 \cdot TP + FP + FN}$$
   
   *Demostración de la ventaja frente a la media aritmética:*  
-  Supóngase un detector ingenuo patológico que, para maximizar el recall, emite miles de cajas por imagen prediciendo todas las clases posibles en todo píxel. Dicho modelo obtendrá un recall perfecto $R = 1,0$, pero su precisión colapsará debido a una marea de falsos positivos, por ejemplo $P = 0,05$.
+  Supóngase un detector ingenuo patológico que, para maximizar el recall, emite miles de cajas prediciendo todas las clases posibles en todo píxel. Dicho modelo obtendrá un recall perfecto $R = 1,0$, pero su precisión colapsará debido a una marea de falsos positivos, por ejemplo $P = 0,05$.
   - Si calculáramos la **media aritmética**:
     $$\mathcal{A}(P, R) = \frac{P + R}{2} = \frac{0,05 + 1,0}{2} = 0,525$$
     El modelo obtendría un 52,5% de rendimiento, superando falsamente el umbral de aprobación de 0,50 de la cátedra con un sistema totalmente inútil en producción.
@@ -438,7 +466,7 @@ Organizado en 7 bloques temáticos rigurosos con formulación matemática y refe
      Grafica la Precisión $P(\tau)$ frente al Recall $R(\tau)$. En detección de objetos y datasets fuertemente desbalanceados (donde la clase 'fondo' supera en millones de veces a los objetos, haciendo que los Verdaderos Negativos $TN$ sean incalculables e irrelevantes), la curva ROC resulta engañosa porque un número astronómico de $TN$ mantiene el $\text{FPR}$ artificialmente cerca de cero.  
      La curva PR es estrictamente informativa: para calcular el **Average Precision (AP)** se utiliza la curva interpolada monótonamente decreciente:
      $$\rho_{\text{interp}}(r) = \max_{\tilde{r} \ge r} P(\tilde{r}), \qquad \text{AP} = \int_0^1 \rho_{\text{interp}}(r) \, dr$$
-     El punto de tangencia con las curvas de nivel hiperbólicas de $F_1$ constante ($P \cdot R / (P+R) = k$) define el **umbral óptimo de operación**, el cual determinamos empíricamente en $\tau = 0,17$ para V2 y $\tau = 0,23$ para V3."
+     El punto de tangencia con las curvas de nivel hiperbólicas de $F_1$ constante define el **umbral óptimo de operación**, el cual determinamos empíricamente en $\tau = 0,17$ para V2 y $\tau = 0,23$ para V3."
 
 #### Pregunta G.3: "Compare matemáticamente la función de pérdida Entropía Cruzada Categórica con la Focal Loss y explique su rol frente al desbalance extremo en detección."
 - **Respuesta Técnica Fundamentada:**  
@@ -471,7 +499,7 @@ Organizado en 7 bloques temáticos rigurosos con formulación matemática y refe
   
   *Regla de actualización final:*
   $$\theta_{t+1} = \theta_t - \frac{\alpha}{\sqrt{\hat{v}_t} + \epsilon} \hat{m}_t$$
-  Físicamente, cada parámetro recibe un paso de aprendizaje adaptativo individual: los pesos con gradientes infrecuentes o pequeños reciben pasos proporcionalmente mayores, mientras que los pesos con oscilaciones violentas se amortiguan, permitiendo una convergencia rápida y estable en modelos complejos basados en Transformers."
+  Físicamente, cada parámetro recibe un paso de aprendizaje adaptativo individual: los pesos con gradientes infrecuentes reciben pasos proporcionalmente mayores, mientras que los pesos con oscilaciones violentas se amortiguan, permitiendo una convergencia rápida y estable en modelos complejos basados en Transformers."
 
 #### Pregunta G.5: "Explique el mecanismo analítico de regularización por Weight Decay (L2) frente a Lasso (L1) y su impacto en las fronteras de decisión."
 - **Respuesta Técnica Fundamentada:**  
@@ -500,11 +528,11 @@ Organizado en 7 bloques temáticos rigurosos con formulación matemática y refe
   *Campo Receptivo (Receptive Field):*  
   El campo receptivo de una neurona en la capa $l$ es la región espacial de la imagen de entrada original que influye en su activación. Crece inductivamente capa tras capa en función del tamaño del kernel $K_l$ y el stride acumulado:
   $$RF_l = RF_{l-1} + (K_l - 1) \cdot \prod_{i=1}^{l-1} S_i$$
-  - **Jerarquía Biológica (Hubel y Wiesel / Neocognitron de Fukushima):** En las capas iniciales, los campos receptivos son diminutos (ej. $3 \times 3$ o $5 \times 5$ px), emulando las *células simples* de la corteza visual primaria que detectan gradientes de borde, líneas orientadas y texturas elementales.
+  - **Jerarquía Biológica (Hubel y Wiesel / Neocognitron de Fukushima):** En las capas iniciales, los campos receptivos son diminutos (ej. $3 \times 3$ px), emulando las *células simples* de la corteza visual primaria que detectan gradientes de borde, líneas orientadas y texturas elementales.
   - A medida que se profundiza en la red mediante convoluciones sucesivas y submuestreo, el campo receptivo se expande hasta abarcar la escena completa, emulando las *células complejas* que reconocen partes de objetos y conceptos semánticos abstractos.
   - *Contraste con Vision Transformers (OWLv2):* A diferencia de las CNNs donde el campo receptivo crece gradualmente, el mecanismo de auto-atención multi-cabeza (MHSA) de ViT conecta todos los parches espaciales entre sí desde la primera capa, otorgando un **campo receptivo global inmediato**, pero exigiendo preentrenamiento masivo al carecer del sesgo inductivo de localidad espacial."
 
-#### Pregunta G.7: "Compare los distintos tipos de Pooling (Max, Average y Global Pooling) y explique su rol en la reducción dimensional y la invarianza espacial."
+#### Pregunta G.7: "Compare los distintos tipos de Pooling (Max, Average y Global Pooling) y su rol en la reducción dimensional."
 - **Respuesta Técnica Fundamentada:**  
   "El submuestreo o *pooling* reduce progresivamente la resolución espacial de los mapas de características intermedias $(H \times W \to \frac{H}{s} \times \frac{W}{s})$, reduciendo drásticamente la carga computacional y el número de parámetros de las capas densas subsecuentes, mitigando el sobreajuste.
   
@@ -523,7 +551,7 @@ Organizado en 7 bloques temáticos rigurosos con formulación matemática y refe
      $$\text{GAP}_c = \frac{1}{H \cdot W} \sum_{i=1}^H \sum_{j=1}^W x_{ijc}$$
      Introducido en arquitecturas modernas (Network in Network, ResNet) para reemplazar las capas completamente conectadas (FC) finales, eliminando millones de parámetros y volviendo a la red totalmente independiente del tamaño de resolución de entrada."
 
-#### Pregunta G.8: "¿Qué es el Problema de Desvanecimiento del Gradiente (Vanishing Gradient), por qué ocurre con funciones sigmoideas y cómo lo resuelven ReLU y las Conexiones Residuales (ResNet / Hiera en SAM2)?"
+#### Pregunta G.8: "¿Qué es el Desvanecimiento del Gradiente (Vanishing Gradient), por qué ocurre con funciones sigmoideas y cómo lo resuelven ReLU y las Conexiones Residuales (ResNet / Hiera en SAM2)?"
 - **Respuesta Técnica Fundamentada:**  
   "Durante el entrenamiento mediante retropropagación (*backpropagation*), el gradiente de la función de pérdida $\mathcal{L}$ respecto a los pesos de una capa inicial $w_1$ se calcula aplicando recursivamente la regla de la cadena:
   $$\frac{\partial \mathcal{L}}{\partial w_1} = \frac{\partial \mathcal{L}}{\partial a_L} \cdot \prod_{l=2}^L \left( \frac{\partial a_l}{\partial z_l} \cdot \frac{\partial z_l}{\partial a_{l-1}} \right) \cdot \frac{\partial z_1}{\partial w_1}$$
@@ -556,7 +584,7 @@ Organizado en 7 bloques temáticos rigurosos con formulación matemática y refe
   2. **Paradigma Vision Transformer Multimodal Open-Vocabulary (OWLv2 / Minderer et al., 2022):**  
      - *Mecánica:* No posee una cabeza de clasificación fija ni predice sobre clases discretas cerradas. Descompone la imagen en parches espaciales proyectados como tokens visuales procesados por capas de auto-atención global (ViT-B/16).
      - *Alineación Multimodal:* Un codificador de texto procesa consultas arbitrarias en lenguaje natural (ej. *'a photo of a {category}'* para 120 clases). Las predicciones de caja y clase se obtienen calculando la similitud coseno escalada entre los embeddings visuales de parches y los embeddings textuales en un espacio latente conjunto preentrenado contrastivamente (estilo CLIP).
-     - *Fortaleza / Limitación:* Vocabulario ilimitado y capacidad de transferencia de disparo cero (*zero-shot*), resolviendo problemas con cola larga (LVIS) sin requerir reentrenamiento supervisado, a costa de mayor latencia computacional (2,44s por imagen frente a los ~20ms de YOLO)."
+     - *Fortaleza / Limitación:* Vocabulario ilimitado y capacidad de transferencia de disparo cero (*zero-shot*), resolviendo problemas con cola larga (LVIS) sin requerir reentrenamiento supervisado, a costa de mayor latencia computacional (2,22s por imagen frente a los ~20ms de YOLO)."
 
 #### Pregunta G.10: "Enmarque el sistema desarrollado dentro de la Teoría de Agentes Inteligentes (Russell & Norvig / Unidad 1): Describa el marco REAS/PEAS, caracterice las propiedades del entorno y justifique por qué es un Agente Reactivo Basado en Modelos."
 - **Respuesta Técnica Fundamentada:**  
@@ -566,12 +594,12 @@ Organizado en 7 bloques temáticos rigurosos con formulación matemática y refe
      - **Rendimiento (Performance):** Métrica combinada de calidad oficial de la cátedra:
        $$\text{PipelineScore} = 0,40 \cdot F_{1,\text{box}} + 0,35 \cdot F_{1,\text{mask}} + 0,15 \cdot \text{Consistencia} + 0,10 \cdot \text{Exactitud}_{\text{QA}}$$
      - **Entorno (Environment):** Fotografías bidimensionales RGB del dataset de desarrollo y prueba en Kaggle con alta complejidad visual, oclusiones y anotación federada LVIS.
-     - **Actuadores (Actuators):** Generación y serialización del archivo estructurado `SceneJSON` (con máscaras RLE y relaciones topológicas), exportación del `submission.csv` y emisión de respuestas textuales auditables.
+     - **Actuadores (Actuators):** Generación y serialización del archivo estructurado `SceneJSON` (con máscaras RLE y relaciones topológicas), exportación del archivo oficial `submission.csv` y emisión de respuestas textuales auditables.
      - **Sensores (Sensors):** Matriz de píxeles capturada del archivo de imagen (canales RGB) y el flujo de texto de las preguntas de usuario en lenguaje natural.
   
   2. **Propiedades del Entorno de Trabajo:**
      - **Parcialmente Observable:** El agente no posee información total del estado físico del mundo debido a oclusiones mutuas entre objetos, sombras, objetos fuera de encuadre y anotaciones federadas incompletas.
-     - **Determinista en Razonamiento / Estocástico en Percepción:** La inferencia neuronal de punto flotante opera en modo determinista estricto fijando semillas (`seed = 42`, `temperature = 0.0`), y la ejecución simbólica de consultas sobre el grafo JSON es 100% determinista.
+     - **Determinista en Razonamiento / Estocástico en Percepción:** La inferencia neuronal opera en modo determinista estricto fijando semillas (`seed = 42`, `temperature = 0.0`), y la ejecución simbólica de consultas sobre el grafo JSON es 100% determinista.
      - **Episódico:** Cada imagen constituye un episodio atómico e independiente. La percepción o respuesta en la imagen $t$ no afecta el estado interno ni condiciona la inferencia en la imagen $t+1$.
      - **Estático:** La escena visual no muta ni evoluciona en el tiempo mientras los algoritmos de detección, segmentación y VQA están deliberando.
      - **Híbrido Continuo/Discreto:** Continuo en la fase perceptiva (coordenadas numéricas de cajas flotantes en $[0, 1]$, probabilidades de confianza y tensores de píxeles) y discreto en la representación simbólica (grilla topológica $3 \times 3$, conteos enteros y clases semánticas).
@@ -584,51 +612,35 @@ Organizado en 7 bloques temáticos rigurosos con formulación matemática y refe
 
 ---
 
-## 3. Preguntas Trampa ("Trap Questions"), Antipatrones de Defensa y Protocolos de Respuesta
+## 3. Preguntas Trampa ("Trap Questions") y Estrategia de Pivote
 
-Los profesores suelen formular preguntas con premisas falsas o provocaciones técnicas para evaluar si el grupo comprende verdaderamente los fundamentos o si memorizó respuestas sin criterio.
-
----
-
-### Matriz de Preguntas Trampa
-
-| # | Pregunta Trampa del Evaluador | Trampa Oculta / Premisa Falsa | Antipatrón: Lo que NUNCA se debe decir | Respuesta Ganadora (The Pivot Strategy) |
+| # | Pregunta Trampa del Docente | Trampa Oculta / Premisa Falsa | Antipatrón: Lo que NUNCA se debe decir | Respuesta Ganadora (The Pivot Strategy) |
 |---|---|---|---|---|
 | **T.1** | *"¿Por qué no hicieron fine-tuning completo de OWLv2 y SAM2 sobre las 120 imágenes para mejorar la precisión?"* | El docente quiere inducir al error de sugerir entrenamiento supervisado sobre un dataset minúsculo. | *"No nos dio el tiempo"* o *"Kaggle no tenía suficiente GPU"*. | **Pivotar a Overfitting y Data Efficiency:** Explicar que 120 imágenes para 120 clases representan apenas 1 imagen por clase en promedio. Reentrenar 150M de parámetros provocaría sobreajuste catastrófico (*catastrophic forgetting*). El mérito residió en formular un pipeline de zero-shot inference fundacional sin tocar pesos. |
 | **T.2** | *"Si su detector tiene 0,71 de precisión de cajas, ¿por qué no subieron el umbral de confianza a 0,80 para tener 0,95 de precisión?"* | Ignorar el compromiso precisión-recall y la media armónica. | *"Sí, podríamos haberlo subido para que no tenga falsos positivos"*. | **Pivotar a la Dinámica del F1:** Mostrar que elevar la confianza a 0,80 destruye el recall (cayendo de 0,63 a menos de 0,15), colapsando el F1 armónico a $<0,25$. El objetivo del TPI es optimizar el balance armónico evaluable. |
-| **T.3** | *"En VQA, ¿por qué usan un LLM si el motor determinista es más exacto (0,78 vs 0,55)?"* | La premisa busca que descarten el módulo LLM del nivel de Promoción. | *"El LLM anda peor, lo pusimos porque lo pedía la consigna"*. | **Pivotar a la Separación Neuro-Simbólica:** Explicar que el LLM no es un motor de respuestas, sino una interfaz de lenguaje natural. Los humanos no preguntan en JSON formal; el LLM dota al sistema de flexibilidad conversacional, mientras que el motor determinista garantiza la veracidad factual. |
+| **T.3** | *"En VQA, ¿por qué usan un LLM si el motor determinista es más exacto (0,789 vs 0,579)?"* | La premisa busca que descarten el módulo LLM del nivel de Promoción. | *"El LLM anda peor, lo pusimos porque lo pedía la consigna"*. | **Pivotar a la Separación Neuro-Simbólica:** Explicar que el LLM no es un motor de respuestas, sino una interfaz de lenguaje natural. Los humanos no preguntan en JSON formal; el LLM dota al sistema de flexibilidad conversacional, mientras que el motor determinista garantiza la veracidad factual. |
 | **T.4** | *"¿Por qué no usaron una cuadrícula de 10x10 en lugar de 3x3 para la posición de los centroides?"* | Presión hacia hiper-resolución innecesaria que introduce fragilidad. | *"Podríamos haber hecho 10x10 para que sea más preciso"*. | **Pivotar a la Rúbrica y Robustez Semántica:** La rúbrica fija formalmente la grilla de 9 celdas (`top_left` a `bottom_right`). Además, una grilla de 10x10 volvería al sistema hipersensible al ruido del centroide en objetos en movimiento o bordes deformados. |
-| **T.5** | *"¿Cómo saben que el pipeline no tiene fuga de datos (data leakage) del conjunto de test?"* | Cuestionar la integridad del score de 0,6800 en Kaggle. | *"El código lo corrió Kaggle directamente"*. | **Pivotar a la Arquitectura Ciegan:** El script de inferencia procesa el CSV de test de manera ciega: no lee ninguna etiqueta de ground truth (las cuales son privadas de la cátedra), y las máscaras y cajas se deducen puramente de los píxeles de las imágenes en tiempo de ejecución. |
+| **T.5** | *"¿Cómo saben que el pipeline no tiene fuga de datos (data leakage) del conjunto de test y cómo validaron submission.csv?"* | Cuestionar la integridad del score de 0,6926 en Kaggle. | *"El código lo corrió Kaggle directamente"*. | **Pivotar a la Arquitectura Ciega:** El script de inferencia procesa el archivo de test de manera ciega: no lee ninguna etiqueta de ground truth (las cuales son privadas de la cátedra), y las máscaras y cajas se deducen puramente de los píxeles de las 80 imágenes de prueba en tiempo de ejecución. El archivo `submission.csv` contiene exactamente esas 80 predicciones en formato `image_id,SceneJSON`, validado de forma independiente en el servidor de Kaggle. |
 | **T.6** | *"¿Por qué el F1 de máscaras (0,6351) es menor que el de cajas (0,6722)?"* | Intentar que admitan un error de segmentación. | *"SAM2 anduvo más o menos bien"*. | **Pivotar a la Propagación de Errores y Geometría:** El cálculo de IoU sobre máscaras binarias es geométricamente mucho más estricto que sobre cajas rectangulares envolventes. Cualquier divergencia a nivel de píxel en bordes delgados castiga la intersección, perdiéndose 61 TP de cajas al traducirlas a máscaras. |
-| **T.7** | *"Si los mosaicos 2x2 mejoraron el resultado, ¿por qué no hicieron 4x4 u 8x8 con 16 recortes?"* | Empujar hacia una extrapolación absurda sin considerar latencia ni contexto. | *"Habría sido mejor pero no tuvimos tiempo de probarlo"*. | **Pivotar a Rendimiento Decreciente y Latencia:** 4x4 mosaicos implicaría 17 pasadas inferenciales por imagen ($\approx 12\text{ segundos}$ por imagen), incrementando masivamente los falsos positivos en objetos truncados y destruyendo el contexto global necesario para reconocer categorías complejas. |
+| **T.7** | *"Si los mosaicos 2x2 mejoraron el resultado, ¿por qué no hicieron 4x4 u 8x8 con 16 recortes?"* | Empujar hacia una extrapolación absurda sin considerar latencia ni contexto. | *"Habría sido mejor pero no tuvimos tiempo de probarlo"*. | **Pivotar a Rendimiento Decreciente y Latencia:** 4x4 mosaicos implicaría 17 pasadas inferenciales por imagen ($\approx 10\text{ segundos}$ por imagen), incrementando masivamente los falsos positivos en objetos truncados y destruyendo el contexto global necesario para reconocer categorías complejas. |
 | **T.8** | *"El LLM a veces no responde y dice 'unsupported', ¿eso no es una falla de su sistema?"* | Confundir abstención justificada con fallo de software. | *"Es una limitación del modelo chico Qwen"*. | **Pivotar a la Rúbrica de Promoción:** La consigna exige explícitamente responder `unsupported` o `insufficient_information` ante atributos inexistentes. Abstenerse de inventar respuestas no es una falla; es una garantía de seguridad contra alucinaciones. |
-
----
-
-### Protocolo General para Desactivar Trampas (The Pivot Framework)
-
-Cuando el tribunal plantee una objeción incisiva:
-1. **Validar y reconocer la premisa:** *"Es una excelente observación, profesor..."* (Demuestra madurez, jamás ponerse a la defensiva).
-2. **Identificar la restricción o fundamento teórico:** *"...sin embargo, en este dominio rige el principio de [desbalance de clases / compromiso sesgo-varianza / política LVIS / consigna de interpretabilidad]"*.
-3. **Presentar la evidencia empírica cuantitativa:** *"Cuando ensayamos esa alternativa en el notebook [Citar Celda / Experimento], observamos que la métrica cayó en [X] puntos debido a [Falsos Positivos / Latencia / Fragmentación]"*.
-4. **Conclusión firme:** *"Por lo tanto, la configuración adoptada representa el compromiso óptimo demostrable entre capacidad expresiva y rigor matemático."*
 
 ---
 
 ## 4. Hoja de Ruta Práctica para el Día de la Defensa (Checklist de Preparación)
 
 ### 4.1. Checklist Pre-Defensa (24 Horas Antes)
-- [ ] **Notebook en Kaggle:** Versión pública y ejecutable de `tpi-ia-2026p-21.ipynb` con todas las celdas corridas y las salidas visualizadas (gráficos y tablas visibles sin necesidad de re-ejecución).
-- [ ] **Submission Persistida:** Archivo `submission.csv` (80 filas válidas) verificado localmente con script de consistencia de columnas y valores.
-- [ ] **Informe Técnico Impreso y Digital:** Tener a mano `informe_tecnico_tpi.pdf` para abrirlo de inmediato ante cualquier consulta de figuras o fórmulas.
+- [ ] **Notebook en Kaggle:** Versión pública y ejecutable de `tpi-ia-2026p-21.ipynb` con las 72 celdas corridas y las salidas visualizadas (gráficos y tablas visibles sin necesidad de re-ejecución).
+- [ ] **Submission Persistida:** Archivo `submission.csv` (80 filas válidas con columnas `image_id,SceneJSON`) verificado y validado en Kaggle con el score de **0,6926**.
+- [ ] **Informe Técnico Final Disponible:** Tener a mano [`INFORME_TPI_IA_2026P_21.md`](file:///c:/Users/perez/OneDrive/Documents/Ing.Sist-NUBE/IA/TPI%20IA%202026/INFORME_TPI_IA_2026P_21.md) para abrirlo de inmediato ante cualquier consulta de figuras, tablas o fórmulas.
 - [ ] **Entorno de Demostración Local / Kaggle:** Sesión de Kaggle con GPU T4 pre-asignada por si la cátedra solicita inferencia en vivo sobre una imagen inédita.
 - [ ] **Sincronización de Equipo:** Ensayo cronometrado de los 10 minutos con el software de presentación.
 
 ### 4.2. Protocolo de Ejecución Durante la Presentación
 1. **Cronómetro a la vista:** Gabriel Ocampo inicia un cronómetro en el celular apoyado sobre la mesa al comenzar a hablar.
-2. **Voz firme y contacto visual:** No leer diapositivas ni textos largos; utilizar las diapositivas como apoyo gráfico exclusivo (Figuras 1 a 11 del informe).
-3. **Dominio transversal:** Aunque cada integrante tenga asignado un bloque, cualquiera debe estar preparado para responder repreguntas teóricas de la Sección 2.
-4. **Espíritu de cuerpo:** Apoyar a los compañeros; si un integrante titubea en un número exacto, otro miembro puede intervenir constructivamente: *"Exactamente, alcanzamos 0,6722 en Box F1"*.
+2. **Voz firme y contacto visual:** No leer diapositivas ni textos largos; utilizar las diapositivas como apoyo gráfico exclusivo (Figuras 1 a 12 del informe).
+3. **Dominio transversal:** Aunque cada integrante tenga asignado un bloque, cualquiera debe estar preparado para responder repreguntas teóricas del Bloque G.
+4. **Espíritu de cuerpo:** Apoyar a los compañeros; si un integrante titubea en un número exacto, otro miembro puede intervenir constructivamente: *"Exactamente, alcanzamos 0,6722 en Box F1 y 0,6926 en el Leaderboard de Kaggle"*.
 
 ---
-*Fin de la Guía Táctica Maestra para la Defensa Oral — Grupo 21 (UTN Primavera 2026)*
+*Fin de la Guía Táctica Maestra para la Defensa Oral — Grupo 21 (UTN FRC — Primavera 2026)*
